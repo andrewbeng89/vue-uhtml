@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Page Title</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+  <my-component></my-component>
+  <script type="module">
+    import { html } from "https://unpkg.com/uhtml?module";
+    import { reactive } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
+    import { defineComponent, mounted, updated } from "./index.mjs";
+
+    defineComponent("my-component", () => {
+      const state = reactive({
+        text: "hello"
+      });
+
+      const onInput = e => {
+        state.text = e.target.value
+      };
+
+      mounted(() => {
+        console.log("mounted...");
+      });
+
+      updated(() => {
+        console.log(state.text);
+      });
+
+      return () => html`
+        <p>
+        ${state.text} <input value=${state.text} oninput=${onInput}>
+        </p>
+      `
+    })
+  </script>
+</body>
+</html>
