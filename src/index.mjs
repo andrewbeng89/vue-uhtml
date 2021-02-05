@@ -17,11 +17,15 @@ export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate")
 export const updated = createLifecycleMethod("hookUpdated");
 export const unmounted = createLifecycleMethod("hookUnmounted");
 
-export const defineComponent = (name, factory) => {
+export const defineComponent = (name, factory, propDefs = []) => {
   console.log(customElements);
   customElements.define(
     name,
     class extends HTMLElement {
+      static get observedAttributes() {
+        return propDefs;
+      }
+
       constructor() {
         super();
 
