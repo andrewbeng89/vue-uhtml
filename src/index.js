@@ -9,6 +9,10 @@ const createLifecycleMethod = name => hook => {
   }
 }
 
+const runLifeCycleMethod = hooks => {
+  hooks?.forEach(hook => hook());
+};
+
 export const beforeCreate = createLifecycleMethod("hookBeforeCreate");
 export const created = createLifecycleMethod("hookCreated");
 export const beforeMount = createLifecycleMethod("hookBeforeMount");
@@ -18,7 +22,6 @@ export const updated = createLifecycleMethod("hookUpdated");
 export const unmounted = createLifecycleMethod("hookUnmounted");
 
 export const defineComponent = (name, factory, propDefs = []) => {
-  console.log(customElements);
   customElements.define(
     name,
     class extends HTMLElement {
@@ -30,12 +33,12 @@ export const defineComponent = (name, factory, propDefs = []) => {
         super();
 
         // Execute beforeCreate hook
-        this.hookBeforeCreate?.forEach(hook => hook());
+        runLifeCycleMethod(this.hookBeforeCreate);
 
         currentInstance = this;
 
         // Execute created hook
-        this.hookCreated?.forEach(hook => hook());
+        runLifeCycleMethod(this.hookCreated);
 
         const props = this.props = reactive({});
         const template = factory.call(this, props);
@@ -45,19 +48,19 @@ export const defineComponent = (name, factory, propDefs = []) => {
         const root = this.attachShadow({ mode: "closed" });
 
         // Execute beforeMount hook
-        this.hookBeforeMount?.forEach(hook => hook());
+        runLifeCycleMethod(this.hookBeforeMount);
         let isMounted = false;
 
         effect(() => {
           if (isMounted) {
-            this.hookBeforeUpdate?.forEach(hook => hoook());
+            runLifeCycleMethod(this.hookBeforeUpdate);
           }
 
           render(root, template());
           
           if (isMounted) {
             // Execute updated hook
-            this.hookUpdated?.forEach(hook => hook());
+            runLifeCycleMethod(this.hookUpdated);
           } else {
             isMounted = true;
           }
@@ -66,12 +69,12 @@ export const defineComponent = (name, factory, propDefs = []) => {
 
       connectedCallback() {
         // Execute mounted hook
-        this.hookMounted?.forEach(hook => hook());
+        runLifeCycleMethod(this.hookMounted);
       }
 
       disconnectedCallback() {
         // Execute unmounted hook
-        this.hookUnmounted?.forEach(hook => hook());
+        runLifeCycleMethod(this.hookUnmounted);
       }
 
       attributeChangedCallback(name, oldValue, newValue) {

@@ -3,23 +3,39 @@
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>Page Title</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
 <body>
   <my-component></my-component>
   <script type="module">
     import { html } from "https://unpkg.com/uhtml?module";
-    import { reactive } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
-    import { defineComponent, mounted, updated } from "./index.mjs";
+    import { reactive, readonly } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
+    import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
+    import { defineComponent, mounted, updated } from "./index.js";
+
+    const useStore = createStore({ reactive, readonly });
+    const store = useStore({
+      state: {
+        text: "hello world"
+      },
+      actions: {
+        setText: (state, text) => {
+          state.text = text;
+        }
+      }
+    });
+
+    defineComponent(
+      "my-display",
+      props => () => html`
+        <p>${props.message}</p>
+      `,
+      ["message"]
+    );
 
     defineComponent("my-component", () => {
-      const state = reactive({
-        text: "hello"
-      });
-
       const onInput = e => {
-        state.text = e.target.value
+        store.dispatch("setText", e.target.value);
       };
 
       mounted(() => {
@@ -27,13 +43,14 @@
       });
 
       updated(() => {
-        console.log(state.text);
+        console.log(store.state.text);
       });
 
       return () => html`
         <p>
-        ${state.text} <input value=${state.text} oninput=${onInput}>
+          <input value=${store.state.text} oninput=${onInput}>
         </p>
+        <my-display message=${store.state.text}></my-display>
       `
     })
   </script>
