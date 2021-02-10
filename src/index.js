@@ -21,7 +21,19 @@ export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate")
 export const updated = createLifecycleMethod("hookUpdated");
 export const unmounted = createLifecycleMethod("hookUnmounted");
 
-export const defineComponent = (name, factory, propDefs = []) => {
+export const emit = ctx => (name, payload) => {
+  ctx.dispatchEvent(
+    new CustomEvent(name, {
+      detail: payload
+    })
+  );
+};
+
+export const defineComponent = (name, setup, {
+  propDefs
+} = {
+  propDefs: []
+}) => {
   customElements.define(
     name,
     class extends HTMLElement {
@@ -41,9 +53,8 @@ export const defineComponent = (name, factory, propDefs = []) => {
         runLifeCycleMethod(this.hookCreated);
 
         const props = this.props = reactive({});
-        const template = factory.call(this, props);
 
-        currentInstance = null;
+        const template = setup.call(this, { props, ctx: this });
 
         const root = this.attachShadow({ mode: "closed" });
 
@@ -65,6 +76,8 @@ export const defineComponent = (name, factory, propDefs = []) => {
             isMounted = true;
           }
         });
+        
+        currentInstance = null;
       }
 
       connectedCallback() {
