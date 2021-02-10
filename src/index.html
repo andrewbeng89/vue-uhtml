@@ -4,6 +4,8 @@
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js"></script>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
   <my-component></my-component>
@@ -12,11 +14,12 @@
     import { reactive, readonly } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
     import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
     import { defineComponent, mounted, updated } from "./index.js";
+    import { defineUiInput } from "./ui-components.js";
 
     const useStore = createStore({ reactive, readonly });
     const store = useStore({
       state: {
-        text: "hello world"
+        text: ""
       },
       actions: {
         setText: (state, text) => {
@@ -25,17 +28,27 @@
       }
     });
 
+    defineUiInput();
+
     defineComponent(
       "my-display",
-      props => () => html`
+      ({ props }) => () => html`
         <p>${props.message}</p>
       `,
-      ["message"]
+      {
+        propDefs: ["message"]
+      }
     );
 
-    defineComponent("my-component", () => {
-      const onInput = e => {
-        store.dispatch("setText", e.target.value);
+    defineComponent("my-component", ({ ctx }) => {
+    
+      const onInput = ({ detail }) => {
+        const { value } = detail;
+        store.dispatch("setText", value);
+      };
+
+      const listeners = {
+        input: onInput
       };
 
       mounted(() => {
@@ -48,7 +61,11 @@
 
       return () => html`
         <p>
-          <input value=${store.state.text} oninput=${onInput}>
+          <ui-input
+            label="Welcome message"
+            value=${store.state.text}
+            oninput.native=${onInput}
+          />
         </p>
         <my-display message=${store.state.text}></my-display>
       `

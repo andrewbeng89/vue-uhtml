@@ -1,0 +1,100 @@
+import { html } from "https://unpkg.com/uhtml?module";
+import { reactive, computed } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
+import { defineComponent, emit } from "./index.js";
+
+export const defineUiInput = ({
+  name = "ui-input"
+} = {
+  name: "ui-input"
+}) => {
+  defineComponent(
+    name,
+    ({ props, ctx }) => {
+      const state = reactive({
+        isFocused: false,
+        id: `id-${uuidv4()}`
+      });
+  
+      const dispatchEvent = emit(ctx);
+  
+      const updateValue = ({ target }) => {
+        dispatchEvent("input.native", { value: target.value });
+      };
+  
+      const handleFocus = event => {
+        state.isFocused = true;
+      };
+  
+      const handleBlur = event => {
+        state.isFocused = false;
+      };
+  
+      const handleKeyup = event => {
+      };
+  
+      const isFilled = computed(() => !!props.value);
+  
+      const labelClassNames = computed(() => {
+        const baseClasses = "absolute px-1 transition-all duration-150 origin-left transform pointer-events-none select-none left-3";
+        let result = "";
+  
+        if (state.isFocused || isFilled.value) {
+          result = "-translate-y-1/2 bg-white text-xs";
+  
+          if (state.isFocused) {
+            result += " text-blue";
+          }
+  
+          if (isFilled.value) {
+            result += " text-gray-500";
+          }
+        } else if (props.placeholder) {
+          result = "-translate-y-1/2 bg-white text-xs text-gray-700";
+        } else {
+          result = "text-gray-500 translate-y-4 text-sm";
+        }
+  
+        return `${baseClasses} ${result}`;
+      });
+  
+      const inputClasses = computed(() => {
+        const baseClasses = "block w-full p-4 text-gray-900 placeholder-gray-400 transition duration-150 rounded-none outline-none h-14 hover:border-blue";
+  
+        const focusStateClasses = state.isFocused ? "border-2 border-blue -mx-px" : "border";
+      });
+  
+      return () => html`
+        <div class="relative">
+          <label
+            class=${labelClassNames.value}
+            for=${state.id}
+            >${props.label}</label
+          >
+          <input
+            id=${state.id}
+            value=${props.value}
+            readonly=${props.readonly}
+            oninput=${updateValue}
+            onfocus=${handleFocus}
+            onblur=${handleBlur}
+            onkeyup=${handleKeyup}
+            class=${inputClasses.value}
+            type="text"
+            autocomplete=${props.autocomplete}
+            placeholder=${props.placeholder}
+          />
+        </div>
+      `;
+    },
+    {
+      propDefs: [
+        "value",
+        "label",
+        "placeholder",
+        "autofocus",
+        "readonly",
+        "autocomplete"
+      ]
+    }
+  );
+};
