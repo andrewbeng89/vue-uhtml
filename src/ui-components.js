@@ -61,9 +61,12 @@ export const defineUiInput = ({
         const baseClasses = "block w-full p-4 text-gray-900 placeholder-gray-400 transition duration-150 rounded-none outline-none h-14 hover:border-blue";
   
         const focusStateClasses = state.isFocused ? "border-2 border-blue -mx-px" : "border";
+
+        return `${baseClasses} ${focusStateClasses}`
       });
   
       return () => html`
+        <link href="main.css" rel="stylesheet">
         <div class="relative">
           <label
             class=${labelClassNames.value}
