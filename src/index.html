@@ -19,7 +19,7 @@
     const useStore = createStore({ reactive, readonly });
     const store = useStore({
       state: {
-        text: ""
+        text: "Hello, world!"
       },
       actions: {
         setText: (state, text) => {
@@ -33,7 +33,7 @@
     defineComponent(
       "my-display",
       ({ props }) => () => html`
-        <p>${props.message}</p>
+        <pre>message: ${props.message}</pre>
       `,
       {
         propDefs: ["message"]
@@ -60,11 +60,13 @@
       });
 
       return () => html`
+        <pre>Rusable UI custom elements</pre>
         <p>
           <ui-input
             label="Welcome message"
             value=${store.state.text}
             oninput.native=${onInput}
+            onkeyup.native=${({ detail }) => console.log(detail)}
           />
         </p>
         <my-display message=${store.state.text}></my-display>
