@@ -29,10 +29,10 @@ export const useEmit = ctx => (name, payload) => {
   );
 };
 
-export const defineComponent = (name, setup, {
-  propDefs
-} = {
-  propDefs: []
+export const defineComponent = ({
+  name,
+  setup,
+  propDefs = []
 }) => {
   customElements.define(
     name,

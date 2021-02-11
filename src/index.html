@@ -30,47 +30,55 @@
 
     defineUiInput();
 
-    defineComponent(
-      "my-display",
-      ({ props }) => () => html`
+    defineComponent({
+      name: "my-display",
+      setup: ({ props }) => () => html`
         <pre>message: ${props.message}</pre>
       `,
-      {
-        propDefs: ["message"]
-      }
-    );
+      propDefs: ["message"]
+    });
 
-    defineComponent("my-component", ({ ctx }) => {
+    defineComponent({
+      name: "my-component",
+      
+      setup: ({ ctx }) => {
     
-      const onInput = ({ detail }) => {
-        const { value } = detail;
-        store.dispatch("setText", value);
-      };
+        const onInput = ({ detail }) => {
+          const { value } = detail;
+          store.dispatch("setText", value);
+        };
 
-      const listeners = {
-        input: onInput
-      };
+        const listeners = {
+          input: onInput
+        };
 
-      mounted(() => {
-        console.log("mounted...");
-      });
+        mounted(() => {
+          console.log("mounted...");
+        });
 
-      updated(() => {
-        console.log(store.state.text);
-      });
+        updated(() => {
+          console.log(store.state.text);
+        });
 
-      return () => html`
-        <pre>Rusable UI custom elements</pre>
-        <p>
-          <ui-input
-            label="Welcome message"
-            value=${store.state.text}
-            oninput.native=${onInput}
-            onkeyup.native=${({ detail }) => console.log(detail)}
-          />
-        </p>
-        <my-display message=${store.state.text}></my-display>
-      `
+        return () => html`
+          <pre>Rusable UI custom elements</pre>
+          <p>
+            <ui-input
+              label="Welcome message"
+              value=${store.state.text}
+              oninput.native=${onInput}
+              onkeyup.native=${({ detail }) => console.log(detail)}
+            />
+          </p>
+          ${
+            store.state.text
+              ? html`
+                <my-display message=${store.state.text}></my-display>
+              `
+              : ""
+          }
+        `
+      }
     })
   </script>
 </body>

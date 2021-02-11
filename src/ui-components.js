@@ -7,9 +7,10 @@ export const defineUiInput = ({
 } = {
   name: "ui-input"
 }) => {
-  defineComponent(
+  defineComponent({
     name,
-    ({ props, emit, refs }) => {
+
+    setup: ({ props, emit, refs }) => {
       const state = reactive({
         isFocused: false,
         id: `id-${uuidv4()}`
@@ -120,15 +121,14 @@ export const defineUiInput = ({
         </div>
       `;
     },
-    {
-      propDefs: [
-        "value",
-        "label",
-        "placeholder",
-        "autofocus",
-        "readonly",
-        "autocomplete"
-      ]
-    }
-  );
+
+    propDefs: [
+      "value",
+      "label",
+      "placeholder",
+      "autofocus",
+      "readonly",
+      "autocomplete"
+    ]
+  });
 };
