@@ -9,7 +9,7 @@ export const defineUiInput = ({
 }) => {
   defineComponent(
     name,
-    ({ props, emit }) => {
+    ({ props, emit, refs }) => {
       const state = reactive({
         isFocused: false,
         id: `id-${uuidv4()}`
@@ -56,6 +56,10 @@ export const defineUiInput = ({
             keyCode
           }
         });
+
+        if (code === "Escape") {
+          refs.input?.blur();
+        }
       };
   
       const isFilled = computed(() => !!props.value);
@@ -111,6 +115,7 @@ export const defineUiInput = ({
             type="text"
             autocomplete=${props.autocomplete}
             placeholder=${props.placeholder}
+            ref=${node => refs.input = node}
           />
         </div>
       `;

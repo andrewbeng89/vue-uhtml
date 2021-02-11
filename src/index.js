@@ -57,7 +57,8 @@ export const defineComponent = (name, setup, {
         const template = setup.call(this, {
           props,
           ctx: this,
-          emit: useEmit(this)
+          emit: useEmit(this),
+          refs: reactive({})
         });
 
         const root = this.attachShadow({ mode: "closed" });
