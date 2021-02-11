@@ -1,6 +1,6 @@
 import { html } from "https://unpkg.com/uhtml?module";
 import { reactive, computed } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
-import { defineComponent, emit } from "./index.js";
+import { defineComponent } from "./index.js";
 
 export const defineUiInput = ({
   name = "ui-input"
@@ -9,27 +9,53 @@ export const defineUiInput = ({
 }) => {
   defineComponent(
     name,
-    ({ props, ctx }) => {
+    ({ props, emit }) => {
       const state = reactive({
         isFocused: false,
         id: `id-${uuidv4()}`
       });
-  
-      const dispatchEvent = emit(ctx);
+
+      const emitEvent = ({ name, detail }) => {
+        emit(`${name}.native`, detail);
+      };
   
       const updateValue = ({ target }) => {
-        dispatchEvent("input.native", { value: target.value });
+        emitEvent({
+          name: "input",
+          detail: {
+            value: target.value
+          }
+        });
       };
   
-      const handleFocus = event => {
+      const handleFocus = ({ target }) => {
         state.isFocused = true;
+        emitEvent({
+          name: "focus",
+          detail: {
+            value: target.value
+          }
+        });
       };
   
-      const handleBlur = event => {
+      const handleBlur = ({ target }) => {
         state.isFocused = false;
+        emitEvent({
+          name: "blur",
+          detail: {
+            value: target.value
+          }
+        });
       };
   
-      const handleKeyup = event => {
+      const handleKeyup = ({ code, keyCode }) => {
+        emitEvent({
+          name: "keyup",
+          detail: {
+            code,
+            keyCode
+          }
+        });
       };
   
       const isFilled = computed(() => !!props.value);
