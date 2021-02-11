@@ -21,7 +21,7 @@ export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate")
 export const updated = createLifecycleMethod("hookUpdated");
 export const unmounted = createLifecycleMethod("hookUnmounted");
 
-export const emit = ctx => (name, payload) => {
+export const useEmit = ctx => (name, payload) => {
   ctx.dispatchEvent(
     new CustomEvent(name, {
       detail: payload
@@ -54,7 +54,11 @@ export const defineComponent = (name, setup, {
 
         const props = this.props = reactive({});
 
-        const template = setup.call(this, { props, ctx: this });
+        const template = setup.call(this, {
+          props,
+          ctx: this,
+          emit: useEmit(this)
+        });
 
         const root = this.attachShadow({ mode: "closed" });
 
