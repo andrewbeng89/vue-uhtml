@@ -132,3 +132,52 @@ export const defineUiInput = ({
     ]
   });
 };
+
+export const defineUiDialog = ({
+  name = "ui-dialog"
+} = {
+  name: "ui-dialog"
+}) => {
+  defineComponent({
+    name,
+
+    setup: ({ slots, emit }) => {
+      return () => html`
+        <link href="main.css" rel="stylesheet">
+        <div class="fixed inset-0 z-50" role="dialog">
+          <div
+            class="fixed inset-0 bg-black opacity-60"
+            data-test="background"
+            onclick=${() => emit('close.native')}
+          ></div>
+          <div
+            class="container fixed bg-white shadow-lg"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 600px; width: calc(100% - 2rem);"
+          >
+            ${
+              slots.header ? html`
+                <header
+                  class="flex items-center justify-between h-12 py-3 pl-4 pr-2 bg-gray-100 lg:h-14 lg:pr-3 lg:pl-6 lg:py-4"
+                >
+                  <slot name="header"></slot>
+                </header>
+              ` : ""
+            }
+            <main class="px-4 pt-6 pb-3 lg:px-6">
+              <slot></slot>
+            </main>
+            ${
+              slots.footer ? html`
+                <footer
+                  class="flex justify-between px-4 py-6 lg:px-6"
+                >
+                  <slot name="footer"></slot>
+                </footer>
+              ` : ""
+            }
+          </div>
+        </div>
+      `;
+    }
+  })
+};
