@@ -14,21 +14,29 @@
     import { reactive, readonly } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
     import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
     import { defineComponent, mounted, updated } from "./index.js";
-    import { defineUiInput } from "./ui-components.js";
+    import { defineUiInput, defineUiDialog } from "./ui-components.js";
 
     const useStore = createStore({ reactive, readonly });
     const store = useStore({
       state: {
-        text: "Hello, world!"
+        text: "Hello, world!",
+        isDialogOpen: false
       },
       actions: {
         setText: (state, text) => {
           state.text = text;
+        },
+        openDialog: state => {
+          state.isDialogOpen = true;
+        },
+        closeDialog: state => {
+          state.isDialogOpen = false;
         }
       }
     });
 
     defineUiInput();
+    defineUiDialog();
 
     defineComponent({
       name: "my-display",
@@ -57,7 +65,7 @@
         });
 
         updated(() => {
-          console.log(store.state.text);
+          console.log(store.state);
         });
 
         return () => html`
@@ -76,6 +84,18 @@
                 <my-display message=${store.state.text}></my-display>
               `
               : ""
+          }
+          <button onclick=${() => store.dispatch("openDialog")}>
+            Open dialog
+          </button>
+          ${
+            store.state.isDialogOpen ? html`
+              <ui-dialog onclose.native=${() => store.dispatch("closeDialog")}>
+                <span slot="header">Dialog header</span>
+                Dialog content
+                <span slot="footer">Dialog footer</span>
+              </ui-dialog>
+            ` : ""
           }
         `
       }
