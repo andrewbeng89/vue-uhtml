@@ -53,12 +53,14 @@ export const defineComponent = ({
         runLifeCycleMethod(this.hookCreated);
 
         const props = this.props = reactive({});
+        const slots = this.slots = reactive({});
 
         const template = setup.call(this, {
           props,
           ctx: this,
           emit: useEmit(this),
-          refs: reactive({})
+          refs: reactive({}),
+          slots
         });
 
         const root = this.attachShadow({ mode: "closed" });
@@ -88,6 +90,10 @@ export const defineComponent = ({
       connectedCallback() {
         // Execute mounted hook
         runLifeCycleMethod(this.hookMounted);
+
+        this.querySelectorAll("[slot]").forEach(slot => {
+          this.slots[slot.getAttribute("slot")] = slot
+        });
       }
 
       disconnectedCallback() {
