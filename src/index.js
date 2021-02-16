@@ -53,6 +53,17 @@ export const defineComponent = ({
         runLifeCycleMethod(this.hookCreated);
 
         const props = this.props = reactive({});
+        propDefs.forEach(key => {
+          Object.defineProperty(this, key, {
+            get() {
+              return this.props[key];
+            },
+            set(value) {
+              this.props[key] = value;
+            }
+          });
+        });
+
         const slots = this.slots = reactive({});
 
         const template = setup.call(this, {
@@ -102,7 +113,13 @@ export const defineComponent = ({
       }
 
       attributeChangedCallback(name, oldValue, newValue) {
-        this.props[name] = newValue;
+        let val;
+        try {
+          val = JSON.parse(newValue);
+        } catch (e) {
+          val = newValue;
+        }
+        this[name] = val;
       }
     }
   );
