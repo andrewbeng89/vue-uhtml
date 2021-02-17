@@ -1,6 +1,4 @@
-import { html } from "https://unpkg.com/uhtml?module";
-import { reactive, computed } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
-import { defineComponent } from "./index.js";
+import { defineComponent, reactive, computed, html } from "./index.js";
 
 export const defineUiInput = ({
   name = "ui-input"
@@ -10,7 +8,7 @@ export const defineUiInput = ({
   defineComponent({
     name,
 
-    setup: ({ props, emit, refs }) => {
+    setup: ({ props, emit, refs, ctx }) => {
       const state = reactive({
         isFocused: false,
         id: `id-${uuidv4()}`
@@ -21,6 +19,7 @@ export const defineUiInput = ({
       };
   
       const updateValue = ({ target }) => {
+        ctx.value = target.value;
         emitEvent({
           name: "input",
           detail: {
@@ -106,7 +105,7 @@ export const defineUiInput = ({
           >
           <input
             id=${state.id}
-            value=${props.value}
+            value=${props.value || (props.value = "")}
             readonly=${props.readonly}
             oninput=${updateValue}
             onfocus=${handleFocus}
