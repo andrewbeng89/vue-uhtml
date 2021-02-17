@@ -1,4 +1,6 @@
 {
+  "name": "vue-hyper",
+  "version": "0.1.0",
   "dependencies": {
     "autoprefixer": "^10.2.4",
     "core-js": "^3.8.3",
