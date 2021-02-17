@@ -126,3 +126,4 @@ export const defineComponent = ({
 };
 
 export * from "https://unpkg.com/uhtml?module";
+export * from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
