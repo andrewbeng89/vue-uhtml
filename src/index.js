@@ -124,3 +124,5 @@ export const defineComponent = ({
     }
   );
 };
+
+export * from "https://unpkg.com/uhtml?module";
