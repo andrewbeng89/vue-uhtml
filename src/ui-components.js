@@ -1,5 +1,9 @@
 import { defineComponent, reactive, computed, html } from "./index.js";
 
+const stylesheetLink = () => html`
+  <link href="index.css" rel="stylesheet">
+`;
+
 export const defineUiInput = ({
   name = "ui-input"
 } = {
@@ -96,7 +100,7 @@ export const defineUiInput = ({
       });
   
       return () => html`
-        <link href="main.css" rel="stylesheet">
+        ${stylesheetLink()}
         <div class="relative">
           <label
             class=${labelClassNames.value}
@@ -142,7 +146,7 @@ export const defineUiDialog = ({
 
     setup: ({ slots, emit }) => {
       return () => html`
-        <link href="main.css" rel="stylesheet">
+        ${stylesheetLink()}
         <div class="fixed inset-0 z-50" role="dialog">
           <div
             class="fixed inset-0 bg-black opacity-60"

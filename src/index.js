@@ -1,5 +1,6 @@
-import { render } from "https://unpkg.com/uhtml?module";
-import { reactive, effect } from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
+import { render } from "uhtml";
+import { reactive, effect } from "@vue/reactivity";
+import "./main.css";
 
 let currentInstance;
 
@@ -125,5 +126,5 @@ export const defineComponent = ({
   );
 };
 
-export * from "https://unpkg.com/uhtml?module";
-export * from "https://unpkg.com/@vue/reactivity/dist/reactivity.esm-browser.js";
+export * from "uhtml";
+export * from "@vue/reactivity";
