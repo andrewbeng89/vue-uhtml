@@ -56,8 +56,13 @@ export default [
           }
         ]
       }),
-      serve("dist"),
-      livereload("dist")
+      ...(process.env.NODE_ENV === "production"
+        ? []
+        : [
+          serve("dist"),
+          livereload("dist")
+        ]
+      )
     ]
   }
 ];

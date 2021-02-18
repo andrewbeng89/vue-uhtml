@@ -1,6 +1,10 @@
 {
   "name": "vue-hyper",
   "version": "0.1.0",
+  "scripts": {
+    "dev": "yarn rollup -c -w",
+    "build": "NODE_ENV=production yarn rollup -c"
+  },
   "dependencies": {
     "@vue/composition-api": "^1.0.0-rc.2",
     "autoprefixer": "^10.2.4",
