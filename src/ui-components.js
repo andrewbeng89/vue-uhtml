@@ -69,39 +69,39 @@ export const defineUiInput = ({
       const isFilled = computed(() => !!props.value);
   
       const labelClassNames = computed(() => {
-        const baseClasses = "absolute px-1 transition-all duration-150 origin-left transform pointer-events-none select-none left-3";
+        const baseClasses = "ce-absolute ce-px-1 ce-transition-all ce-duration-150 ce-origin-left ce-transform ce-pointer-events-none ce-select-none ce-left-3";
         let result = "";
   
         if (state.isFocused || isFilled.value) {
-          result = "-translate-y-1/2 bg-white text-xs";
+          result = "-ce-translate-y-1/2 ce-bg-white ce-text-xs";
   
           if (state.isFocused) {
-            result += " text-blue";
+            result += " ce-text-blue";
           }
   
           if (isFilled.value) {
-            result += " text-gray-500";
+            result += " ce-text-gray-500";
           }
         } else if (props.placeholder) {
-          result = "-translate-y-1/2 bg-white text-xs text-gray-700";
+          result = "-ce-translate-y-1/2 ce-bg-white ce-text-xs ce-text-gray-700";
         } else {
-          result = "text-gray-500 translate-y-4 text-sm";
+          result = "ce-text-gray-500 ce-translate-y-4 ce-text-sm";
         }
   
         return `${baseClasses} ${result}`;
       });
   
       const inputClasses = computed(() => {
-        const baseClasses = "block w-full p-4 text-gray-900 placeholder-gray-400 transition duration-150 rounded-none outline-none h-14 hover:border-blue";
+        const baseClasses = "ce-block ce-w-full ce-p-4 ce-text-gray-900 ce-placeholder-gray-400 ce-transition ce-duration-150 ce-rounded-none ce-outline-none ce-h-14 ce-hover:border-blue";
   
-        const focusStateClasses = state.isFocused ? "border-2 border-blue -mx-px" : "border";
+        const focusStateClasses = state.isFocused ? "ce-border-2 ce-border-blue -ce-mx-px" : "ce-border";
 
         return `${baseClasses} ${focusStateClasses}`
       });
   
       return () => html`
         ${stylesheetLink()}
-        <div class="relative">
+        <div class="ce-relative">
           <label
             class=${labelClassNames.value}
             for=${state.id}
@@ -147,32 +147,32 @@ export const defineUiDialog = ({
     setup: ({ slots, emit }) => {
       return () => html`
         ${stylesheetLink()}
-        <div class="fixed inset-0 z-50" role="dialog">
+        <div class="ce-fixed ce-inset-0 ce-z-50" role="dialog">
           <div
-            class="fixed inset-0 bg-black opacity-60"
+            class="ce-fixed ce-inset-0 ce-bg-black ce-opacity-60"
             data-test="background"
             onclick=${() => emit('close.native')}
           ></div>
           <div
-            class="container fixed bg-white shadow-lg"
+            class="ce-container ce-fixed ce-bg-white ce-shadow-lg"
             style="left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 600px; width: calc(100% - 2rem);"
           >
             ${
               slots.header ? html`
                 <header
-                  class="flex items-center justify-between h-12 py-3 pl-4 pr-2 bg-gray-100 lg:h-14 lg:pr-3 lg:pl-6 lg:py-4"
+                  class="ce-flex ce-items-center ce-justify-between ce-h-12 ce-py-3 ce-pl-4 ce-pr-2 ce-bg-gray-100 ce-lg:h-14 ce-lg:pr-3 ce-lg:pl-6 ce-lg:py-4"
                 >
                   <slot name="header"></slot>
                 </header>
               ` : ""
             }
-            <main class="px-4 pt-6 pb-3 lg:px-6">
+            <main class="ce-px-4 ce-pt-6 ce-pb-3 ce-lg:px-6">
               <slot></slot>
             </main>
             ${
               slots.footer ? html`
                 <footer
-                  class="flex justify-between px-4 py-6 lg:px-6"
+                  class="ce-flex ce-justify-between ce-px-4 ce-py-6 ce-lg:px-6"
                 >
                   <slot name="footer"></slot>
                 </footer>

@@ -1,4 +1,5 @@
 module.exports = {
+  prefix: "ce-",
   purge: [
     "./src/**/*.html",
     "./src/**/*.js"
