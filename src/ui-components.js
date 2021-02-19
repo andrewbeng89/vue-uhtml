@@ -1,7 +1,10 @@
 import { defineComponent, reactive, computed, html } from "./index.js";
+import rawStyles from "./main.css";
 
-const stylesheetLink = () => html`
-  <link href="styles.css" rel="stylesheet">
+const styles = () => html`
+  <style>
+    ${rawStyles}
+  </style>
 `;
 
 export const defineUiInput = ({
@@ -100,7 +103,7 @@ export const defineUiInput = ({
       });
   
       return () => html`
-        ${stylesheetLink()}
+        ${styles()}
         <div class="ce-relative">
           <label
             class=${labelClassNames.value}
@@ -146,7 +149,7 @@ export const defineUiDialog = ({
 
     setup: ({ slots, emit }) => {
       return () => html`
-        ${stylesheetLink()}
+        ${styles()}
         <div class="ce-fixed ce-inset-0 ce-z-50" role="dialog">
           <div
             class="ce-fixed ce-inset-0 ce-bg-black ce-opacity-60"

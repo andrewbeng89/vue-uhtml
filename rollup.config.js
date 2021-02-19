@@ -41,10 +41,6 @@ export default [
             src: "./src/index.html",
             dest: outputDir
           },
-          {
-            src: "./src/ui-components.js",
-            dest: outputDir
-          }
         ]
       }),
       ...(process.env.NODE_ENV === "production"
@@ -56,22 +52,24 @@ export default [
       )
     ]
   }, {
-    input: "src/main.css",
+    input: "src/ui-components.js",
     output: {
       file: process.env.NODE_ENV === "dev"
-        ? "dev/styles.css"
-        : "dist/styles.css"
+        ? "dev/ui-components.js"
+        : "dist/ui-components.js"
     },
     plugins: [
+      nodeResolve(),
       postcss({
         plugins: [
           tailwind(),
           postcssImport()
         ],
-        extract: true,
         module: false,
         minimize: true
-      })
-    ]
+      }),
+      terser()
+    ],
+    external: ["./index.js"]
   }
 ];
