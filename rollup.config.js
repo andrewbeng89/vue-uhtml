@@ -10,7 +10,7 @@ import fg from "fast-glob";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
-const outputDir = "./dist";
+const outputDir = process.env.NODE_ENV === "dev" ? "./dev" : "./dist";
 
 export default [
   {
@@ -59,8 +59,8 @@ export default [
       ...(process.env.NODE_ENV === "production"
         ? []
         : [
-          serve("dist"),
-          livereload("dist")
+          serve("dev"),
+          livereload("dev")
         ]
       )
     ]

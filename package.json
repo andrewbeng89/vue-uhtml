@@ -2,7 +2,7 @@
   "name": "vue-hyper",
   "version": "0.1.0",
   "scripts": {
-    "dev": "yarn rollup -c -w",
+    "dev": "NODE_ENV=dev yarn rollup -c -w",
     "build": "NODE_ENV=production yarn rollup -c"
   },
   "dependencies": {
