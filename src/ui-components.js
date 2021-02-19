@@ -1,7 +1,7 @@
 import { defineComponent, reactive, computed, html } from "./index.js";
 
 const stylesheetLink = () => html`
-  <link href="index.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
 `;
 
 export const defineUiInput = ({
@@ -73,7 +73,7 @@ export const defineUiInput = ({
         let result = "";
   
         if (state.isFocused || isFilled.value) {
-          result = "-ce-translate-y-1/2 ce-bg-white ce-text-xs";
+          result = "ce--translate-y-1/2 ce-bg-white ce-text-xs";
   
           if (state.isFocused) {
             result += " ce-text-blue";
@@ -83,7 +83,7 @@ export const defineUiInput = ({
             result += " ce-text-gray-500";
           }
         } else if (props.placeholder) {
-          result = "-ce-translate-y-1/2 ce-bg-white ce-text-xs ce-text-gray-700";
+          result = "ce--translate-y-1/2 ce-bg-white ce-text-xs ce-text-gray-700";
         } else {
           result = "ce-text-gray-500 ce-translate-y-4 ce-text-sm";
         }
@@ -94,7 +94,7 @@ export const defineUiInput = ({
       const inputClasses = computed(() => {
         const baseClasses = "ce-block ce-w-full ce-p-4 ce-text-gray-900 ce-placeholder-gray-400 ce-transition ce-duration-150 ce-rounded-none ce-outline-none ce-h-14 ce-hover:border-blue";
   
-        const focusStateClasses = state.isFocused ? "ce-border-2 ce-border-blue -ce-mx-px" : "ce-border";
+        const focusStateClasses = state.isFocused ? "ce-border-2 ce-border-blue ce--mx-px" : "ce-border";
 
         return `${baseClasses} ${focusStateClasses}`
       });
@@ -160,7 +160,7 @@ export const defineUiDialog = ({
             ${
               slots.header ? html`
                 <header
-                  class="ce-flex ce-items-center ce-justify-between ce-h-12 ce-py-3 ce-pl-4 ce-pr-2 ce-bg-gray-100 ce-lg:h-14 ce-lg:pr-3 ce-lg:pl-6 ce-lg:py-4"
+                  class="ce-flex ce-itemsce-nter ce-justify-between ce-h-12 ce-py-3 ce-pl-4 ce-pr-2 ce-bg-gray-100 ce-lg:h-14 ce-lg:pr-3 ce-lg:pl-6 ce-lg:py-4"
                 >
                   <slot name="header"></slot>
                 </header>
