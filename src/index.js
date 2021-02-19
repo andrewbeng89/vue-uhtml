@@ -1,6 +1,5 @@
 import { render } from "uhtml";
 import { reactive, effect } from "@vue/reactivity";
-import "./main.css";
 
 let currentInstance;
 

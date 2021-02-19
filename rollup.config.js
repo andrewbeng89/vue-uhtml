@@ -34,15 +34,6 @@ export default [
         "process.env.NODE_ENV": JSON.stringify( "production" )
       }),
       nodeResolve(),
-      postcss({
-        plugins: [
-          tailwind(),
-          postcssImport()
-        ],
-        extract: true,
-        module: false,
-        minimize: true
-      }),
       terser(),
       copy({
         targets: [
@@ -63,6 +54,24 @@ export default [
           livereload("dev")
         ]
       )
+    ]
+  }, {
+    input: "src/main.css",
+    output: {
+      file: process.env.NODE_ENV === "dev"
+        ? "dev/styles.css"
+        : "dist/styles.css"
+    },
+    plugins: [
+      postcss({
+        plugins: [
+          tailwind(),
+          postcssImport()
+        ],
+        extract: true,
+        module: false,
+        minimize: true
+      })
     ]
   }
 ];
