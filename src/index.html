@@ -7,8 +7,82 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js"></script>
 </head>
 <body>
+  <!-- vue-hyper -->
   <my-component></my-component>
-  <ui-input label="Custom Input"></ui-input>
+  
+  <!-- Web Component -->
+  <ui-input id="myInput" label="Custom Input"></ui-input>
+  
+  <!-- Vue -->
+  <div id="vueApp" class="ce-mt-4">
+    <my-input class="ce-p-4"></my-input>
+  </div>
+
+  <!-- React -->
+  <div id="reactApp" class="ce-mt-4"></div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script>
+    // Web Component
+    const myInput = document.querySelector("#myInput");
+    myInput.addEventListener("input", console.log);
+    var onInput = console.log;
+
+    // Vue
+    Vue.config.ignoredElements = ["ui-input"];
+    Vue.component("my-input", {
+      template: `
+        <ui-input
+          :value="inputValue"
+          @input="onInput"
+          label="My Vue Input"
+        />
+      `,
+      methods: {
+        onInput({ target }) {
+          this.inputValue = target.value;
+        }
+      },
+      data() {
+        return {
+          inputValue: ""
+        };
+      }
+    });
+
+    const vueApp = new Vue({
+      el: "#vueApp"
+    });
+  </script>
+  <script type="module">
+    import { html, render } from "https://unpkg.com/htm/preact/standalone.mjs";
+    import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
+    import { reactive, readonly } from "./index.js";
+
+    const useStore = createStore({ reactive, readonly });
+    
+    const state = {
+      inputValue: "Hello, world!"
+    };
+    const actions = {
+      setInputValue: (state, inputValue) => {
+        state.inputValue = inputValue;
+      }
+    };
+    const store = useStore({ state, actions });
+
+    const App = () => {
+      return html`
+        <ui-input
+          label="My Preact Input"
+          value=${store.state.inputValue}
+          onInput=${({ target }) => store.dispatch("setInputValue", target.value)}
+        />
+      `;
+    }
+
+    const domContainer = document.querySelector("#reactApp");
+    render(html`<${App} />`, domContainer);
+  </script>
   <script type="module">
     import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
     import { defineComponent, mounted, updated, html, reactive, readonly } from "./index.js";
