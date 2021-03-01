@@ -123,13 +123,9 @@
       
       setup: ({ ctx }) => {
     
-        const onInput = ({ detail }) => {
-          const { value } = detail;
+        const onInput = ({ target }) => {
+          const { value } = target;
           store.dispatch("setText", value);
-        };
-
-        const listeners = {
-          input: onInput
         };
 
         mounted(() => {
@@ -146,8 +142,8 @@
             <ui-input
               label="Welcome message"
               value=${store.state.text}
-              oninput.native=${onInput}
-              onkeyup.native=${({ detail }) => console.log(detail)}
+              oninput=${onInput}
+              onkeyup=${console.log}
             />
           </p>
           ${
@@ -162,7 +158,7 @@
           </button>
           ${
             store.state.isDialogOpen ? html`
-              <ui-dialog onclose.native=${() => store.dispatch("closeDialog")}>
+              <ui-dialog onclose=${() => store.dispatch("closeDialog")}>
                 <span slot="header">Dialog header</span>
                 Dialog content
                 <span slot="footer">Dialog footer</span>

@@ -2,27 +2,27 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
   <style>
     ${a}
   </style>
-`,n=({name:a="ui-input"}={name:"ui-input"})=>{e({name:a,setup:({props:e,emit:a,refs:n,ctx:c})=>{const l=t({isFocused:!1,id:`id-${uuidv4()}`}),s=({name:e,detail:t})=>{a(`${e}.native`,t)},d=({target:e})=>{c.value=e.value,s({name:"input",detail:{value:e.value}})},p=({target:e})=>{l.isFocused=!0,s({name:"focus",detail:{value:e.value}})},m=({target:e})=>{l.isFocused=!1,s({name:"blur",detail:{value:e.value}})},u=({code:e,keyCode:t})=>{s({name:"keyup",detail:{code:e,keyCode:t}}),"Escape"===e&&n.input?.blur()},b=o((()=>!!e.value)),g=o((()=>{let t="";return l.isFocused||b.value?(t="ce--translate-y-1/2 ce-bg-white ce-text-xs",l.isFocused&&(t+=" ce-text-blue"),b.value&&(t+=" ce-text-gray-500")):t=e.placeholder?"ce--translate-y-1/2 ce-bg-white ce-text-xs ce-text-gray-700":"ce-text-gray-500 ce-translate-y-4 ce-text-sm",`ce-absolute ce-px-1 ce-transition-all ce-duration-150 ce-origin-left ce-transform ce-pointer-events-none ce-select-none ce-left-3 ${t}`})),h=o((()=>`ce-block ce-w-full ce-p-4 ce-text-gray-900 ce-placeholder-gray-400 ce-transition ce-duration-150 ce-rounded-none ce-outline-none ce-h-14 ce-hover:border-blue ${l.isFocused?"ce-border-2 ce-border-blue ce--mx-px":"ce-border"}`));return()=>i`
+`,n=({name:a="ui-input"}={name:"ui-input"})=>{e({name:a,setup:({props:e,refs:a,ctx:n})=>{const c=t({isFocused:!1,id:`id-${uuidv4()}`}),l=({target:e})=>{n.value=e.value},s=()=>{c.isFocused=!0},p=()=>{c.isFocused=!1},d=({code:e})=>{"Escape"===e&&a.input?.blur()},m=o((()=>!!e.value)),u=o((()=>{let t="";return c.isFocused||m.value?(t="ce--translate-y-1/2 ce-bg-white ce-text-xs",c.isFocused&&(t+=" ce-text-blue"),m.value&&(t+=" ce-text-gray-500")):t=e.placeholder?"ce--translate-y-1/2 ce-bg-white ce-text-xs ce-text-gray-700":"ce-text-gray-500 ce-translate-y-4 ce-text-sm",`ce-absolute ce-px-1 ce-transition-all ce-duration-150 ce-origin-left ce-transform ce-pointer-events-none ce-select-none ce-left-3 ${t}`})),b=o((()=>`ce-block ce-w-full ce-p-4 ce-text-gray-900 ce-placeholder-gray-400 ce-transition ce-duration-150 ce-rounded-none ce-outline-none ce-h-14 ce-hover:border-blue ${c.isFocused?"ce-border-2 ce-border-blue ce--mx-px":"ce-border"}`));return()=>i`
         ${r()}
         <div class="ce-relative">
           <label
-            class=${g.value}
-            for=${l.id}
+            class=${u.value}
+            for=${c.id}
             >${e.label}</label
           >
           <input
-            id=${l.id}
+            id=${c.id}
             value=${e.value||(e.value="")}
             readonly=${e.readonly}
-            oninput=${d}
-            onfocus=${p}
-            onblur=${m}
-            onkeyup=${u}
-            class=${h.value}
+            oninput=${l}
+            onfocus=${s}
+            onblur=${p}
+            onkeyup=${d}
+            class=${b.value}
             type="text"
             autocomplete=${e.autocomplete}
             placeholder=${e.placeholder}
-            ref=${e=>n.input=e}
+            ref=${e=>a.input=e}
           />
         </div>
       `},propDefs:["value","label","placeholder","autofocus","readonly","autocomplete"]})},c=({name:t="ui-dialog"}={name:"ui-dialog"})=>{e({name:t,setup:({slots:e,emit:t})=>()=>i`
@@ -31,7 +31,7 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
           <div
             class="ce-fixed ce-inset-0 ce-bg-black ce-opacity-60"
             data-test="background"
-            onclick=${()=>t("close.native")}
+            onclick=${()=>t(new Event("close"))}
           ></div>
           <div
             class="ce-container ce-fixed ce-bg-white ce-shadow-lg"
