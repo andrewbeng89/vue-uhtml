@@ -15,55 +15,25 @@ export const defineUiInput = ({
   defineComponent({
     name,
 
-    setup: ({ props, emit, refs, ctx }) => {
+    setup: ({ props, refs, ctx }) => {
       const state = reactive({
         isFocused: false,
         id: `id-${uuidv4()}`
       });
-
-      const emitEvent = ({ name, detail }) => {
-        emit(`${name}.native`, detail);
-      };
   
       const updateValue = ({ target }) => {
         ctx.value = target.value;
-        emitEvent({
-          name: "input",
-          detail: {
-            value: target.value
-          }
-        });
       };
   
-      const handleFocus = ({ target }) => {
+      const handleFocus = () => {
         state.isFocused = true;
-        emitEvent({
-          name: "focus",
-          detail: {
-            value: target.value
-          }
-        });
       };
   
-      const handleBlur = ({ target }) => {
+      const handleBlur = () => {
         state.isFocused = false;
-        emitEvent({
-          name: "blur",
-          detail: {
-            value: target.value
-          }
-        });
       };
   
-      const handleKeyup = ({ code, keyCode }) => {
-        emitEvent({
-          name: "keyup",
-          detail: {
-            code,
-            keyCode
-          }
-        });
-
+      const handleKeyup = ({ code }) => {
         if (code === "Escape") {
           refs.input?.blur();
         }
@@ -154,7 +124,7 @@ export const defineUiDialog = ({
           <div
             class="ce-fixed ce-inset-0 ce-bg-black ce-opacity-60"
             data-test="background"
-            onclick=${() => emit('close.native')}
+            onclick=${() => emit(new Event("close"))}
           ></div>
           <div
             class="ce-container ce-fixed ce-bg-white ce-shadow-lg"

@@ -21,12 +21,8 @@ export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate")
 export const updated = createLifecycleMethod("hookUpdated");
 export const unmounted = createLifecycleMethod("hookUnmounted");
 
-export const useEmit = ctx => (name, payload) => {
-  ctx.dispatchEvent(
-    new CustomEvent(name, {
-      detail: payload
-    })
-  );
+export const useEmit = ctx => event => {
+  ctx.dispatchEvent(event);
 };
 
 export const defineComponent = ({
