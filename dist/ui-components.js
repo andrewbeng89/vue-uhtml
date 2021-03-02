@@ -5,9 +5,7 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
 `,n=({name:a="ui-input"}={name:"ui-input"})=>{e({name:a,setup:({props:e,refs:a,ctx:n})=>{const c=t({isFocused:!1,id:`id-${uuidv4()}`}),l=({target:e})=>{n.value=e.value},s=()=>{c.isFocused=!0},p=()=>{c.isFocused=!1},d=({code:e})=>{"Escape"===e&&a.input?.blur()},m=o((()=>!!e.value)),u=o((()=>{let t="";return c.isFocused||m.value?(t="ce--translate-y-1/2 ce-bg-white ce-text-xs",c.isFocused&&(t+=" ce-text-blue"),m.value&&(t+=" ce-text-gray-500")):t=e.placeholder?"ce--translate-y-1/2 ce-bg-white ce-text-xs ce-text-gray-700":"ce-text-gray-500 ce-translate-y-4 ce-text-sm",`ce-absolute ce-px-1 ce-transition-all ce-duration-150 ce-origin-left ce-transform ce-pointer-events-none ce-select-none ce-left-3 ${t}`})),b=o((()=>`ce-block ce-w-full ce-p-4 ce-text-gray-900 ce-placeholder-gray-400 ce-transition ce-duration-150 ce-rounded-none ce-outline-none ce-h-14 ce-hover:border-blue ${c.isFocused?"ce-border-2 ce-border-blue ce--mx-px":"ce-border"}`));return()=>i`
         ${r()}
         <div class="ce-relative">
-          <label
-            class=${u.value}
-            for=${c.id}
+          <label class=${u.value} for=${c.id}
             >${e.label}</label
           >
           <input
@@ -38,22 +36,22 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
             style="left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 600px; width: calc(100% - 2rem);"
           >
             ${e.header?i`
-                <header
-                  class="ce-flex ce-itemsce-nter ce-justify-between ce-h-12 ce-py-3 ce-pl-4 ce-pr-2 ce-bg-gray-100 ce-lg:h-14 ce-lg:pr-3 ce-lg:pl-6 ce-lg:py-4"
-                >
-                  <slot name="header"></slot>
-                </header>
-              `:""}
+                  <header
+                    class="ce-flex ce-itemsce-nter ce-justify-between ce-h-12 ce-py-3 ce-pl-4 ce-pr-2 ce-bg-gray-100 ce-lg:h-14 ce-lg:pr-3 ce-lg:pl-6 ce-lg:py-4"
+                  >
+                    <slot name="header"></slot>
+                  </header>
+                `:""}
             <main class="ce-px-4 ce-pt-6 ce-pb-3 ce-lg:px-6">
               <slot></slot>
             </main>
             ${e.footer?i`
-                <footer
-                  class="ce-flex ce-justify-between ce-px-4 ce-py-6 ce-lg:px-6"
-                >
-                  <slot name="footer"></slot>
-                </footer>
-              `:""}
+                  <footer
+                    class="ce-flex ce-justify-between ce-px-4 ce-py-6 ce-lg:px-6"
+                  >
+                    <slot name="footer"></slot>
+                  </footer>
+                `:""}
           </div>
         </div>
       `})};export{c as defineUiDialog,n as defineUiInput};
