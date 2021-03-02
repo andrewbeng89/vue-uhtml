@@ -3,33 +3,29 @@ import { reactive, effect } from "@vue/reactivity";
 
 let currentInstance;
 
-const createLifecycleMethod = name => hook => {
+const createLifecycleMethod = (name) => (hook) => {
   if (currentInstance) {
     (currentInstance[name] || (currentInstance[name] = [])).push(hook);
   }
-}
+};
 
-const runLifeCycleMethod = hooks => {
-  hooks?.forEach(hook => hook());
+const runLifeCycleMethod = (hooks) => {
+  hooks?.forEach((hook) => hook());
 };
 
 export const beforeCreate = createLifecycleMethod("hookBeforeCreate");
 export const created = createLifecycleMethod("hookCreated");
 export const beforeMount = createLifecycleMethod("hookBeforeMount");
 export const mounted = createLifecycleMethod("hookMounted");
-export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate")
+export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate");
 export const updated = createLifecycleMethod("hookUpdated");
 export const unmounted = createLifecycleMethod("hookUnmounted");
 
-export const useEmit = ctx => event => {
+export const useEmit = (ctx) => (event) => {
   ctx.dispatchEvent(event);
 };
 
-export const defineComponent = ({
-  name,
-  setup,
-  propDefs = []
-}) => {
+export const defineComponent = ({ name, setup, propDefs = [] }) => {
   customElements.define(
     name,
     class extends HTMLElement {
@@ -48,26 +44,26 @@ export const defineComponent = ({
         // Execute created hook
         runLifeCycleMethod(this.hookCreated);
 
-        const props = this.props = reactive({});
-        propDefs.forEach(key => {
+        const props = (this.props = reactive({}));
+        propDefs.forEach((key) => {
           Object.defineProperty(this, key, {
             get() {
               return this.props[key];
             },
             set(value) {
               this.props[key] = value;
-            }
+            },
           });
         });
 
-        const slots = this.slots = reactive({});
+        const slots = (this.slots = reactive({}));
 
         const template = setup.call(this, {
           props,
           ctx: this,
           emit: useEmit(this),
           refs: reactive({}),
-          slots
+          slots,
         });
 
         const root = this.attachShadow({ mode: "closed" });
@@ -82,7 +78,7 @@ export const defineComponent = ({
           }
 
           render(root, template());
-          
+
           if (isMounted) {
             // Execute updated hook
             runLifeCycleMethod(this.hookUpdated);
@@ -90,7 +86,7 @@ export const defineComponent = ({
             isMounted = true;
           }
         });
-        
+
         currentInstance = null;
       }
 
@@ -98,8 +94,8 @@ export const defineComponent = ({
         // Execute mounted hook
         runLifeCycleMethod(this.hookMounted);
 
-        this.querySelectorAll("[slot]").forEach(slot => {
-          this.slots[slot.getAttribute("slot")] = slot
+        this.querySelectorAll("[slot]").forEach((slot) => {
+          this.slots[slot.getAttribute("slot")] = slot;
         });
       }
 
