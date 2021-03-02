@@ -11,11 +11,11 @@
   <my-component></my-component>
   
   <!-- Web Component -->
-  <ui-input id="myInput" label="Custom Input"></ui-input>
+  <ui-input id="myInput" label="Custom Input" value="Hello, custom elements!"></ui-input>
   
   <!-- Vue -->
   <div id="vueApp" class="ce-mt-4">
-    <my-input class="ce-p-4"></my-input>
+    <my-app></my-app>
   </div>
 
   <!-- React -->
@@ -29,13 +29,23 @@
 
     // Vue
     Vue.config.ignoredElements = ["ui-input"];
-    Vue.component("my-input", {
+    Vue.component("my-app", {
       template: `
-        <ui-input
-          :value="inputValue"
-          @input="onInput"
-          label="My Vue Input"
-        />
+        <div>
+          <ui-input
+            :value="inputValue"
+            @input="onInput"
+            label="My Vue Input"
+          />
+          <pre v-if="inputValue">message: {{ inputValue }}</pre>
+          <button @click="isDialogOpen = true">Open dialog</button>
+          <ui-dialog v-if="isDialogOpen" @close="isDialogOpen = false">
+            <span slot="header">Dialog header</span>
+            Dialog content
+            <span slot="footer">Dialog footer</span>
+          </ui-dialog>
+          <pre>isDialogOpen: {{ isDialogOpen }}</pre>
+        </div>
       `,
       methods: {
         onInput({ target }) {
@@ -44,7 +54,8 @@
       },
       data() {
         return {
-          inputValue: ""
+          inputValue: "Hello, Vue!",
+          isDialogOpen: false
         };
       }
     });
@@ -54,29 +65,37 @@
     });
   </script>
   <script type="module">
-    import { html, render } from "https://unpkg.com/htm/preact/standalone.mjs";
-    import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
-    import { reactive, readonly } from "./index.js";
-
-    const useStore = createStore({ reactive, readonly });
+    import { createElement, render, Component, h } from "https://unpkg.com/preact@latest?module";
+    import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+    import htm from "https://unpkg.com/htm?module";
+    const html = htm.bind(h);
     
-    const state = {
-      inputValue: "Hello, world!"
-    };
-    const actions = {
-      setInputValue: (state, inputValue) => {
-        state.inputValue = inputValue;
-      }
-    };
-    const store = useStore({ state, actions });
-
     const App = () => {
+      const [inputValue, setInputValue] = useState("Hello, Preact!");
+      const [isDialogOpen, toggleDialog] = useState(false);
+
       return html`
         <ui-input
           label="My Preact Input"
-          value=${store.state.inputValue}
-          onInput=${({ target }) => store.dispatch("setInputValue", target.value)}
+          value=${inputValue}
+          onInput=${({ target }) => setInputValue(target.value)}
         />
+        ${inputValue && html`
+            <pre>Message: ${inputValue}</pre>
+          `
+        }
+        <button onclick=${() => toggleDialog(true)}>
+          Open dialog
+        </button>
+        ${isDialogOpen && html`
+            <ui-dialog onclose=${() => toggleDialog(false)}>
+              <span slot="header">Dialog header</span>
+              Dialog content
+              <span slot="footer">Dialog footer</span>
+            </ui-dialog>
+          `
+        }
+        <pre>isDialogOpen: ${JSON.stringify(isDialogOpen)}</pre>
       `;
     }
 
@@ -91,7 +110,7 @@
     const useStore = createStore({ reactive, readonly });
     const store = useStore({
       state: {
-        text: "Hello, world!",
+        text: "Hello, vue-hyper!",
         isDialogOpen: false
       },
       actions: {
