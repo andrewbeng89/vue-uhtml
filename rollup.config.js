@@ -1,7 +1,7 @@
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
 import tailwind from "tailwindcss";
-import replace from "@rollup/plugin-replace"
+import replace from "@rollup/plugin-replace";
 import copy from "rollup-plugin-copy";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
@@ -18,20 +18,20 @@ export default [
     output: {
       dir: outputDir,
       sourcemap: true,
-      format: "esm"
+      format: "esm",
     },
     plugins: [
       {
         name: "watch-external",
-        async buildStart(){
+        async buildStart() {
           const files = await fg("src/**/*");
-          files.forEach(file => {
+          files.forEach((file) => {
             this.addWatchFile(file);
           });
-        }
+        },
       },
       replace({
-        "process.env.NODE_ENV": JSON.stringify( "production" )
+        "process.env.NODE_ENV": JSON.stringify("production"),
       }),
       nodeResolve(),
       terser(),
@@ -39,37 +39,32 @@ export default [
         targets: [
           {
             src: "./src/index.html",
-            dest: outputDir
+            dest: outputDir,
           },
-        ]
+        ],
       }),
       ...(process.env.NODE_ENV === "production"
         ? []
-        : [
-          serve("dev"),
-          livereload("dev")
-        ]
-      )
-    ]
-  }, {
+        : [serve("dev"), livereload("dev")]),
+    ],
+  },
+  {
     input: "src/ui-components.js",
     output: {
-      file: process.env.NODE_ENV === "dev"
-        ? "dev/ui-components.js"
-        : "dist/ui-components.js"
+      file:
+        process.env.NODE_ENV === "dev"
+          ? "dev/ui-components.js"
+          : "dist/ui-components.js",
     },
     plugins: [
       nodeResolve(),
       postcss({
-        plugins: [
-          tailwind(),
-          postcssImport()
-        ],
+        plugins: [tailwind(), postcssImport()],
         module: false,
-        minimize: true
+        minimize: true,
       }),
-      terser()
+      terser(),
     ],
-    external: ["./index.js"]
-  }
+    external: ["./index.js"],
+  },
 ];
