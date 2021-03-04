@@ -29,7 +29,7 @@ export const defineComponent = ({
   name,
   setup,
   propDefs = [],
-  useShadowDom = true,
+  useShadowDOM = true,
 }) => {
   customElements.define(
     name,
@@ -71,7 +71,7 @@ export const defineComponent = ({
           slots,
         });
 
-        const root = useShadowDom
+        const root = useShadowDOM
           ? this.attachShadow({ mode: "closed" })
           : this;
 
