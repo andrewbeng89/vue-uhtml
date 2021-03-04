@@ -25,7 +25,12 @@ export const useEmit = (ctx) => (event) => {
   ctx.dispatchEvent(event);
 };
 
-export const defineComponent = ({ name, setup, propDefs = [] }) => {
+export const defineComponent = ({
+  name,
+  setup,
+  propDefs = [],
+  useShadowDom = false,
+}) => {
   customElements.define(
     name,
     class extends HTMLElement {
@@ -66,7 +71,9 @@ export const defineComponent = ({ name, setup, propDefs = [] }) => {
           slots,
         });
 
-        const root = this.attachShadow({ mode: "closed" });
+        const root = useShadowDom
+          ? this.attachShadow({ mode: "closed" })
+          : this;
 
         // Execute beforeMount hook
         runLifeCycleMethod(this.hookBeforeMount);
