@@ -110,8 +110,6 @@ export const defineUiInput = (
       "readonly",
       "autocomplete",
     ],
-
-    useShadowDom: false,
   });
 };
 
@@ -161,7 +159,5 @@ export const defineUiDialog = (
         </div>
       `;
     },
-
-    useShadowDom: false,
   });
 };

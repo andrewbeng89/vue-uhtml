@@ -29,7 +29,7 @@ export const defineComponent = ({
   name,
   setup,
   propDefs = [],
-  useShadowDom = false,
+  useShadowDom = true,
 }) => {
   customElements.define(
     name,
