@@ -1,3 +1,4 @@
+import commonjs from "@rollup/plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
 import tailwind from "tailwindcss";
@@ -11,15 +12,26 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
 const outputDir = process.env.NODE_ENV === "dev" ? "./dev" : "./dist";
+const outputCJS =
+  process.env.NODE_ENV === "dev" ? "dev/index.cjs.js" : "dist/index.cjs.js";
+const outputESM =
+  process.env.NODE_ENV === "dev" ? "dev/index.esm.js" : "dist/index.esm.js";
 
 export default [
   {
     input: "src/index.js",
-    output: {
-      dir: outputDir,
-      sourcemap: true,
-      format: "esm",
-    },
+    output: [
+      {
+        file: outputCJS,
+        sourcemap: true,
+        format: "cjs",
+      },
+      {
+        file: outputESM,
+        sourcemap: true,
+        format: "esm",
+      },
+    ],
     plugins: [
       {
         name: "watch-external",
@@ -30,6 +42,7 @@ export default [
           });
         },
       },
+      commonjs(),
       replace({
         "process.env.NODE_ENV": JSON.stringify("production"),
       }),

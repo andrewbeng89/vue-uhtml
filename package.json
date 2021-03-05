@@ -14,6 +14,7 @@
     "@babel/core": "^7.12.13",
     "@babel/plugin-proposal-optional-chaining": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
+    "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.1",
     "@rollup/plugin-replace": "^2.3.4",
     "autoprefixer": "^10.2.4",
@@ -35,8 +36,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-url-resolve": "^0.1.1"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "author": "Andrew Beng",
   "license": "MIT"
 }
