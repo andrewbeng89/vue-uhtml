@@ -61,49 +61,64 @@ export const defineComponent = ({
           });
         });
 
-        const slots = (this.slots = reactive({}));
+        const slots = useShadowDOM ? (this.slots = reactive({})) : undefined;
 
-        const template = setup.call(this, {
+        const template = (this.template = setup.call(this, {
           props,
           ctx: this,
           emit: useEmit(this),
           refs: reactive({}),
-          slots,
-        });
+          ...(slots ? { slots } : {}),
+        }));
 
-        const root = useShadowDOM
+        this.useShadowDOM = useShadowDOM;
+        const root = (this.root = useShadowDOM
           ? this.attachShadow({ mode: "closed" })
-          : this;
+          : this);
+
+        this.render = () => {
+          render(root, template());
+        };
 
         // Execute beforeMount hook
         runLifeCycleMethod(this.hookBeforeMount);
-        let isMounted = false;
+        this.isMounted = false;
 
-        effect(() => {
-          if (isMounted) {
+        this.effectCallback = () => {
+          if (this.isMounted) {
             runLifeCycleMethod(this.hookBeforeUpdate);
           }
 
-          render(root, template());
+          this.render();
 
-          if (isMounted) {
+          if (this.isMounted) {
             // Execute updated hook
             runLifeCycleMethod(this.hookUpdated);
           } else {
-            isMounted = true;
+            this.mounted = true;
           }
-        });
+        };
+
+        if (useShadowDOM) {
+          effect(this.effectCallback);
+        }
 
         currentInstance = null;
       }
 
       connectedCallback() {
+        if (!this.useShadowDOM) {
+          effect(this.effectCallback);
+        }
+
         // Execute mounted hook
         runLifeCycleMethod(this.hookMounted);
 
-        this.querySelectorAll("[slot]").forEach((slot) => {
-          this.slots[slot.getAttribute("slot")] = slot;
-        });
+        if (this.useShadowDOM) {
+          this.querySelectorAll("[slot]").forEach((slot) => {
+            this.slots[slot.getAttribute("slot")] = slot;
+          });
+        }
       }
 
       disconnectedCallback() {
