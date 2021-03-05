@@ -23,7 +23,7 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
             ref=${e=>a.input=e}
           />
         </div>
-      `},propDefs:["value","label","placeholder","autofocus","readonly","autocomplete"]})},c=({name:t="ui-dialog"}={name:"ui-dialog"})=>{e({name:t,setup:({slots:e,emit:t})=>()=>i`
+      `},propDefs:["value","label","placeholder","autofocus","readonly","autocomplete"],useShadowDOM:!1})},c=({name:t="ui-dialog"}={name:"ui-dialog"})=>{e({name:t,setup:({slots:e,emit:t})=>()=>i`
         ${r()}
         <div class="ce-fixed ce-inset-0 ce-z-50" role="dialog">
           <div
@@ -35,7 +35,7 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
             class="ce-container ce-fixed ce-bg-white ce-shadow-lg"
             style="left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 600px; width: calc(100% - 2rem);"
           >
-            ${e.header?i`
+            ${e?.header?i`
                   <header
                     class="ce-flex ce-itemsce-nter ce-justify-between ce-h-12 ce-py-3 ce-pl-4 ce-pr-2 ce-bg-gray-100 ce-lg:h-14 ce-lg:pr-3 ce-lg:pl-6 ce-lg:py-4"
                   >
@@ -45,7 +45,7 @@ import{defineComponent as e,reactive as t,computed as o,html as i}from"./index.j
             <main class="ce-px-4 ce-pt-6 ce-pb-3 ce-lg:px-6">
               <slot></slot>
             </main>
-            ${e.footer?i`
+            ${e?.footer?i`
                   <footer
                     class="ce-flex ce-justify-between ce-px-4 ce-py-6 ce-lg:px-6"
                   >
