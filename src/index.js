@@ -10,7 +10,7 @@ const createLifecycleMethod = (name) => (hook) => {
 };
 
 const runLifeCycleMethod = (hooks) => {
-  hooks?.forEach((hook) => hook());
+  hooks && hooks.forEach((hook) => hook());
 };
 
 export const beforeCreate = createLifecycleMethod("hookBeforeCreate");
