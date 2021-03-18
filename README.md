@@ -4,6 +4,8 @@ Resuable, reactive custom elements framework. Borrows and takes inspiration from
 
 ## Example
 
+[Codepen demo](https://codepen.io/andrewbeng89/pen/jOVodwW)
+
 ```html
 <my-component></my-component>
 
@@ -15,7 +17,7 @@ import {
   mounted,
   updated,
   unmounted
-} from "https://unpkg.com/vue-uhtml";
+} from "https://unpkg.com/vue-uhtml?module";
 
 defineComponent({
   name: "my-component",
