@@ -103,29 +103,8 @@
     render(html`<${App} />`, domContainer);
   </script>
   <script type="module">
-    import { createStore } from "https://gitcdn.link/repo/andrewbeng89/staex/main/dist/index.js";
     import { defineComponent, mounted, updated, html, reactive, readonly } from "./index.esm.js";
     import { defineUiInput, defineUiDialog } from "./ui-components.js";
-
-    const useStore = createStore({ reactive, readonly });
-    const store = useStore({
-      state: {
-        text: "Hello, vue-hyper!",
-        isDialogOpen: false
-      },
-      actions: {
-        setText: (state, text) => {
-          state.text = text;
-        },
-        openDialog: state => {
-          state.isDialogOpen = true;
-        },
-        closeDialog: state => {
-          state.isDialogOpen = false;
-        }
-      }
-    });
-
     defineUiInput();
     defineUiDialog();
 
@@ -141,10 +120,13 @@
       name: "my-component",
       
       setup: ({ ctx }) => {
-    
+        const state = reactive({
+          text: "hello",
+          isDialogOpen: false
+        });
         const onInput = ({ target }) => {
           const { value } = target;
-          store.dispatch("setText", value);
+          state.text = value;
         };
 
         mounted(() => {
@@ -152,7 +134,7 @@
         });
 
         updated(() => {
-          console.log(store.state);
+          console.log("updated: ", state);
         });
 
         return () => html`
@@ -160,31 +142,31 @@
           <p>
             <ui-input
               label="Welcome message"
-              value=${store.state.text}
+              value=${state.text}
               oninput=${onInput}
               onkeyup=${console.log}
             />
           </p>
           ${
-            store.state.text
+            state.text
               ? html`
-                <my-display message=${store.state.text}></my-display>
+                <my-display message=${state.text}></my-display>
               `
               : ""
           }
-          <button onclick=${() => store.dispatch("openDialog")}>
+          <button onclick=${() => (state.isDialogOpen = true)}>
             Open dialog
           </button>
           ${
-            store.state.isDialogOpen ? html`
-              <ui-dialog onclose=${() => store.dispatch("closeDialog")}>
+            state.isDialogOpen ? html`
+              <ui-dialog onclose=${() => (state.isDialogOpen = false)}>
                 <span slot="header">Dialog header</span>
                 Dialog content
                 <span slot="footer">Dialog footer</span>
               </ui-dialog>
             ` : ""
           }
-          <pre>isDialogOpen: ${store.state.isDialogOpen}</pre>
+          <pre>isDialogOpen: ${state.isDialogOpen}</pre>
         `
       }
     })
