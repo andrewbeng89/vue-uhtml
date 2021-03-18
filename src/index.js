@@ -95,7 +95,7 @@ export const defineComponent = ({
             // Execute updated hook
             runLifeCycleMethod(this.hookUpdated);
           } else {
-            this.mounted = true;
+            this.isMounted = true;
           }
         };
 
