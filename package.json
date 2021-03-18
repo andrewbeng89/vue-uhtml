@@ -1,6 +1,6 @@
 {
   "name": "vue-uhtml",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "NODE_ENV=dev yarn rollup -c -w",
     "build": "NODE_ENV=production yarn rollup -c"
@@ -38,6 +38,9 @@
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
   "author": "Andrew Beng",
   "license": "MIT"
 }
