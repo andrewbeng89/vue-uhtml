@@ -1,6 +1,13 @@
 module.exports = {
   presets: [
-    ["@babel/preset-env", { modules: false, useBuiltIns: "usage" }]
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          esmodules: true,
+        },
+      },
+    ],
   ],
-  plugins: ['@babel/plugin-proposal-optional-chaining']
+  plugins: ["@babel/plugin-proposal-optional-chaining"],
 };

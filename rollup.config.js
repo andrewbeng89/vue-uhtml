@@ -7,6 +7,7 @@ import copy from "rollup-plugin-copy";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
 import fg from "fast-glob";
+import { babel } from "@rollup/plugin-babel";
 
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
@@ -43,6 +44,7 @@ export default [
         },
       },
       commonjs(),
+      babel({ babelHelpers: "bundled" }),
       replace({
         "process.env.NODE_ENV": JSON.stringify("production"),
       }),
@@ -76,8 +78,10 @@ export default [
         module: false,
         minimize: true,
       }),
+      replace({
+        "process.env.NODE_ENV": JSON.stringify("production"),
+      }),
       terser(),
     ],
-    external: ["./index.js"],
   },
 ];
