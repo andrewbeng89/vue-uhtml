@@ -8,6 +8,15 @@ Resuable, reactive custom elements framework. Borrows and takes inspiration from
 <my-component></my-component>
 
 <script type="module">
+import {
+  defineComponent,
+  reactive,
+  html,
+  mounted,
+  updated,
+  unmounted
+} from "https://unpkg.com/vue-uhtml";
+
 defineComponent({
   name: "my-component",
   setup: () => {
