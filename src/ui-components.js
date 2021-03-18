@@ -111,7 +111,7 @@ export const defineUiInput = (
       "autocomplete",
     ],
 
-    useShadowDOM: false,
+    useShadowDOM: true,
   });
 };
 
