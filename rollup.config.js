@@ -50,38 +50,46 @@ export default [
       }),
       nodeResolve(),
       terser(),
-      copy({
-        targets: [
-          {
-            src: "./src/index.html",
-            dest: outputDir,
-          },
-        ],
-      }),
+      ...(process.env.NODE_ENV === "dev"
+        ? [
+            copy({
+              targets: [
+                {
+                  src: "./src/index.html",
+                  dest: outputDir,
+                },
+              ],
+            }),
+          ]
+        : []),
       ...(process.env.NODE_ENV === "production"
         ? []
         : [serve("dev"), livereload("dev")]),
     ],
   },
-  {
-    input: "src/ui-components.js",
-    output: {
-      file:
-        process.env.NODE_ENV === "dev"
-          ? "dev/ui-components.js"
-          : "dist/ui-components.js",
-    },
-    plugins: [
-      nodeResolve(),
-      postcss({
-        plugins: [tailwind(), postcssImport()],
-        module: false,
-        minimize: true,
-      }),
-      replace({
-        "process.env.NODE_ENV": JSON.stringify("production"),
-      }),
-      terser(),
-    ],
-  },
+  ...(process.env.NODE_ENV === "dev"
+    ? [
+        {
+          input: "src/ui-components.js",
+          output: {
+            file:
+              process.env.NODE_ENV === "dev"
+                ? "dev/ui-components.js"
+                : "dist/ui-components.js",
+          },
+          plugins: [
+            nodeResolve(),
+            postcss({
+              plugins: [tailwind(), postcssImport()],
+              module: false,
+              minimize: true,
+            }),
+            replace({
+              "process.env.NODE_ENV": JSON.stringify("production"),
+            }),
+            terser(),
+          ],
+        },
+      ]
+    : []),
 ];
