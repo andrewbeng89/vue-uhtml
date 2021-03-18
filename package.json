@@ -1,5 +1,5 @@
 {
-  "name": "vue-hyper",
+  "name": "vue-uhtml",
   "version": "0.1.0",
   "scripts": {
     "dev": "NODE_ENV=dev yarn rollup -c -w",
