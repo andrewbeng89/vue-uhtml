@@ -103,7 +103,17 @@
     render(html`<${App} />`, domContainer);
   </script>
   <script type="module">
-    import { defineComponent, mounted, updated, html, reactive, readonly } from "./index.esm.js";
+    import {
+      defineComponent,
+      onMounted,
+      onUpdated,
+      html,
+      reactive,
+      readonly,
+      onBeforeMount,
+      onBeforeUpdate,
+      onUnmounted
+    } from "./index.esm.js";
     import { defineUiInput, defineUiDialog } from "./ui-components.js";
     defineUiInput();
     defineUiDialog();
@@ -129,11 +139,15 @@
           state.text = value;
         };
 
-        mounted(() => {
+        onBeforeMount(() => console.log("my-component: beforeMount"));
+        onBeforeUpdate(() => console.log("my-component: beforeUpdate"));
+        onUnmounted(() => console.log("my-component: unmounted"));
+
+        onMounted(() => {
           console.log("mounted...");
         });
 
-        updated(() => {
+        onUpdated(() => {
           console.log("updated: ", state);
         });
 
