@@ -2,9 +2,11 @@ import {
   defineComponent,
   reactive,
   html,
-  mounted,
-  updated,
-  unmounted,
+  onBeforeMount,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated,
+  onUnmounted,
 } from "../dist/index.esm";
 
 defineComponent({
@@ -20,6 +22,12 @@ defineComponent({
     const onInput = (e) => {
       state.text = e.target.value;
     };
+
+    onBeforeMount(() => console.log("my-component: beforeMount"));
+    onMounted(() => console.log("my-component: mounted"));
+    onBeforeUpdate(() => console.log("my-component: beforeUpdate"));
+    onUpdated(() => console.log("my-component: updated"));
+    onUnmounted(() => console.log("my-component: unmounted"));
 
     return () => html`
       <button onclick=${toggle}>toggle child</button>
@@ -42,15 +50,15 @@ defineComponent({
       state.count++;
     };
 
-    mounted(() => {
+    onMounted(() => {
       console.log("child mounted");
     });
 
-    updated(() => {
+    onUpdated(() => {
       console.log("child updated");
     });
 
-    unmounted(() => {
+    onUnmounted(() => {
       console.log("child unmounted");
     });
 

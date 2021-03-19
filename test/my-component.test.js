@@ -22,6 +22,10 @@ describe("MyComponent", () => {
     const child = el.shadowRoot.querySelector("my-child");
     spy(child, "runLifeCycleMethod");
 
+    setTimeout(() => child.connectedCallback());
+    await elementUpdated(child);
+    expect(child.runLifeCycleMethod.calledWith(child.hookMounted)).to.be.true;
+
     const count = child.shadowRoot.querySelector("#count");
     expect(child.msg).to.equal("hello");
     expect(count).lightDom.to.equal("0");
@@ -31,6 +35,8 @@ describe("MyComponent", () => {
     setTimeout(increase);
 
     await elementUpdated(child);
+    expect(child.runLifeCycleMethod.calledWith(child.hookBeforeUpdate)).to.be
+      .true;
     expect(child.runLifeCycleMethod.calledWith(child.hookUpdated)).to.be.true;
     expect(count).lightDom.to.equal("1");
 
@@ -38,5 +44,6 @@ describe("MyComponent", () => {
 
     await elementUpdated(el);
     expect(el.shadowRoot.querySelector("my-child")).to.be.null;
+    expect(child.runLifeCycleMethod.calledWith(child.hookUnmounted)).to.be.true;
   });
 });
