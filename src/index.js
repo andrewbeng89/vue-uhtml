@@ -86,23 +86,18 @@ export const defineComponent = ({
             // Execute updated hook
             this.runLifeCycleMethod(this.hookUpdated);
           } else {
-            // Execute beforeMount hook
-            this.runLifeCycleMethod(this.hookBeforeMount);
             this.isMounted = true;
           }
         };
-
-        if (useShadowDOM) {
-          effect(this.effectCallback);
-        }
 
         currentInstance = null;
       }
 
       connectedCallback() {
-        if (!this.useShadowDOM) {
-          effect(this.effectCallback);
-        }
+        // Execute beforeMount hook
+        this.runLifeCycleMethod(this.hookBeforeMount);
+
+        effect(this.effectCallback);
 
         // Execute mounted hook
         this.runLifeCycleMethod(this.hookMounted);
