@@ -1,5 +1,11 @@
 /* eslint-disable no-undef */
-import { html, fixture, expect, elementUpdated } from "@open-wc/testing";
+import {
+  html,
+  fixture,
+  expect,
+  elementUpdated,
+  oneEvent,
+} from "@open-wc/testing";
 import { spy } from "sinon";
 
 import "./my-component";
@@ -17,6 +23,9 @@ describe("MyComponent", () => {
     const toggle = () => toggleButton.click();
     setTimeout(toggle);
 
+    const { detail } = await oneEvent(el, "toggle");
+    expect(detail).to.be.true;
+
     await elementUpdated(el);
 
     const child = el.shadowRoot.querySelector("my-child");
@@ -24,13 +33,15 @@ describe("MyComponent", () => {
 
     setTimeout(() => child.connectedCallback());
     await elementUpdated(child);
+    expect(child.runLifeCycleMethod.calledWith(child.hookBeforeMount)).to.be
+      .true;
     expect(child.runLifeCycleMethod.calledWith(child.hookMounted)).to.be.true;
 
-    const count = child.shadowRoot.querySelector("#count");
+    const count = child.querySelector("#count");
     expect(child.msg).to.equal("hello");
     expect(count).lightDom.to.equal("0");
 
-    const increaseButton = child.shadowRoot.querySelector("button");
+    const increaseButton = child.querySelector("button");
     const increase = () => increaseButton.click();
     setTimeout(increase);
 

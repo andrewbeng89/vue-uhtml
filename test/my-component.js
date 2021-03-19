@@ -11,13 +11,14 @@ import {
 
 defineComponent({
   name: "my-component",
-  setup: () => {
+  setup: ({ emit }) => {
     const state = reactive({
       text: "hello",
       show: false,
     });
     const toggle = () => {
       state.show = !state.show;
+      emit(new CustomEvent("toggle", { detail: state.show }));
     };
     const onInput = (e) => {
       state.text = e.target.value;
@@ -69,5 +70,6 @@ defineComponent({
     `;
   },
   shadowMode: "open",
+  useShadowDOM: false,
   propDefs: ["msg"],
 });
