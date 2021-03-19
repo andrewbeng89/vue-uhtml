@@ -7,9 +7,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js"></script>
 </head>
 <body>
-  <!-- vue-hyper -->
-  <my-component></my-component>
-  
   <!-- Web Component -->
   <ui-input id="myInput" label="Custom Input" value="Hello, custom elements!"></ui-input>
   
@@ -20,6 +17,10 @@
 
   <!-- React -->
   <div id="reactApp" class="ce-mt-4"></div>
+  
+  <!-- vue-hyper -->
+  <my-component></my-component>
+  
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
   <script>
     // Web Component
@@ -105,14 +106,14 @@
   <script type="module">
     import {
       defineComponent,
-      onMounted,
-      onUpdated,
       html,
       reactive,
       readonly,
       onBeforeMount,
+      onMounted,
       onBeforeUpdate,
-      onUnmounted
+      onUpdated,
+      onUnmounted,
     } from "./index.esm.js";
     import { defineUiInput, defineUiDialog } from "./ui-components.js";
     defineUiInput();
@@ -128,62 +129,66 @@
 
     defineComponent({
       name: "my-component",
-      
-      setup: ({ ctx }) => {
+      setup: ({ emit }) => {
         const state = reactive({
           text: "hello",
-          isDialogOpen: false
+          show: false,
         });
-        const onInput = ({ target }) => {
-          const { value } = target;
-          state.text = value;
+        const toggle = () => {
+          state.show = !state.show;
+          emit(new CustomEvent("toggle", { detail: state.show }));
+        };
+        const onInput = (e) => {
+          state.text = e.target.value;
         };
 
         onBeforeMount(() => console.log("my-component: beforeMount"));
+        onMounted(() => console.log("my-component: mounted"));
         onBeforeUpdate(() => console.log("my-component: beforeUpdate"));
+        onUpdated(() => console.log("my-component: updated"));
         onUnmounted(() => console.log("my-component: unmounted"));
 
+        return () => html`
+          <button onclick=${toggle}>toggle child</button>
+          <p>
+            <span>${state.text}</span>
+            <input value=${state.text} oninput=${onInput} />
+          </p>
+          ${state.show ? html`<my-child msg=${state.text}></my-child>` : ``}
+        `;
+      },
+    });
+
+    defineComponent({
+      name: "my-child",
+
+      setup: ({ props }) => {
+        const state = reactive({ count: 0 });
+        const increase = () => {
+          state.count++;
+        };
+
         onMounted(() => {
-          console.log("mounted...");
+          console.log("child mounted");
         });
 
         onUpdated(() => {
-          console.log("updated: ", state);
+          console.log("child updated");
+        });
+
+        onUnmounted(() => {
+          console.log("child unmounted");
         });
 
         return () => html`
-          <pre>Rusable UI custom elements</pre>
-          <p>
-            <ui-input
-              label="Welcome message"
-              value=${state.text}
-              oninput=${onInput}
-              onkeyup=${console.log}
-            />
-          </p>
-          ${
-            state.text
-              ? html`
-                <my-display message=${state.text}></my-display>
-              `
-              : ""
-          }
-          <button onclick=${() => (state.isDialogOpen = true)}>
-            Open dialog
-          </button>
-          ${
-            state.isDialogOpen ? html`
-              <ui-dialog onclose=${() => (state.isDialogOpen = false)}>
-                <span slot="header">Dialog header</span>
-                Dialog content
-                <span slot="footer">Dialog footer</span>
-              </ui-dialog>
-            ` : ""
-          }
-          <pre>isDialogOpen: ${state.isDialogOpen}</pre>
-        `
-      }
-    })
+          <p>${props.msg}</p>
+          <p id="count">${state.count}</p>
+          <button onclick=${increase}>increase</button>
+        `;
+      },
+      useShadowDOM: false,
+      propDefs: ["msg"],
+    });
   </script>
 </body>
 </html>
