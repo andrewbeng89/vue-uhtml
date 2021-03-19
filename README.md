@@ -14,9 +14,9 @@ import {
   defineComponent,
   reactive,
   html,
-  mounted,
-  updated,
-  unmounted
+  onMounted,
+  onUpdated,
+  onUnmounted
 } from "https://unpkg.com/vue-uhtml?module";
 
 defineComponent({
@@ -53,15 +53,15 @@ defineComponent({
       state.count++;
     };
 
-    mounted(() => {
+    onMounted(() => {
       console.log("child mounted");
     });
 
-    updated(() => {
+    onUpdated(() => {
       console.log("child updated");
     });
 
-    unmounted(() => {
+    onUnmounted(() => {
       console.log("child unmounted");
     });
 
