@@ -9,10 +9,6 @@ const createLifecycleMethod = (name) => (hook) => {
   }
 };
 
-const runLifeCycleMethod = (hooks) => {
-  hooks && hooks.forEach((hook) => hook());
-};
-
 export const beforeCreate = createLifecycleMethod("hookBeforeCreate");
 export const created = createLifecycleMethod("hookCreated");
 export const beforeMount = createLifecycleMethod("hookBeforeMount");
@@ -39,16 +35,20 @@ export const defineComponent = ({
         return propDefs;
       }
 
+      runLifeCycleMethod(hooks) {
+        hooks && hooks.forEach((hook) => hook());
+      }
+
       constructor() {
         super();
 
         // Execute beforeCreate hook
-        runLifeCycleMethod(this.hookBeforeCreate);
+        this.runLifeCycleMethod(this.hookBeforeCreate);
 
         currentInstance = this;
 
         // Execute created hook
-        runLifeCycleMethod(this.hookCreated);
+        this.runLifeCycleMethod(this.hookCreated);
 
         const props = (this.props = reactive({}));
         propDefs.forEach((key) => {
@@ -74,7 +74,7 @@ export const defineComponent = ({
 
         this.useShadowDOM = useShadowDOM;
         const root = (this.root = useShadowDOM
-          ? this.attachShadow({ mode: "closed" })
+          ? this.attachShadow({ mode: shadowMode })
           : this);
 
         this.render = () => {
@@ -82,19 +82,19 @@ export const defineComponent = ({
         };
 
         // Execute beforeMount hook
-        runLifeCycleMethod(this.hookBeforeMount);
+        this.runLifeCycleMethod(this.hookBeforeMount);
         this.isMounted = false;
 
         this.effectCallback = () => {
           if (this.isMounted) {
-            runLifeCycleMethod(this.hookBeforeUpdate);
+            this.runLifeCycleMethod(this.hookBeforeUpdate);
           }
 
           this.render();
 
           if (this.isMounted) {
             // Execute updated hook
-            runLifeCycleMethod(this.hookUpdated);
+            this.runLifeCycleMethod(this.hookUpdated);
           } else {
             this.isMounted = true;
           }
@@ -113,7 +113,7 @@ export const defineComponent = ({
         }
 
         // Execute mounted hook
-        runLifeCycleMethod(this.hookMounted);
+        this.runLifeCycleMethod(this.hookMounted);
 
         if (this.useShadowDOM) {
           this.querySelectorAll("[slot]").forEach((slot) => {
@@ -124,7 +124,7 @@ export const defineComponent = ({
 
       disconnectedCallback() {
         // Execute unmounted hook
-        runLifeCycleMethod(this.hookUnmounted);
+        this.runLifeCycleMethod(this.hookUnmounted);
       }
 
       attributeChangedCallback(name, oldValue, newValue) {
