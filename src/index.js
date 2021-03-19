@@ -30,6 +30,7 @@ export const defineComponent = ({
   setup,
   propDefs = [],
   useShadowDOM = true,
+  shadowMode = "closed",
 }) => {
   customElements.define(
     name,
