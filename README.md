@@ -72,6 +72,7 @@ defineComponent({
     `;
   },
   propDefs: ["msg"],
+  useShadowDOM: false,
 });
 </script>
 ```
