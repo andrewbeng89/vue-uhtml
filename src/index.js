@@ -9,13 +9,11 @@ const createLifecycleMethod = (name) => (hook) => {
   }
 };
 
-export const beforeCreate = createLifecycleMethod("hookBeforeCreate");
-export const created = createLifecycleMethod("hookCreated");
-export const beforeMount = createLifecycleMethod("hookBeforeMount");
-export const mounted = createLifecycleMethod("hookMounted");
-export const beforeUpdate = createLifecycleMethod("hookBeforeUpdate");
-export const updated = createLifecycleMethod("hookUpdated");
-export const unmounted = createLifecycleMethod("hookUnmounted");
+export const onBeforeMount = createLifecycleMethod("hookBeforeMount");
+export const onMounted = createLifecycleMethod("hookMounted");
+export const onBeforeUpdate = createLifecycleMethod("hookBeforeUpdate");
+export const onUpdated = createLifecycleMethod("hookUpdated");
+export const onUnmounted = createLifecycleMethod("hookUnmounted");
 
 export const useEmit = (ctx) => (event) => {
   ctx.dispatchEvent(event);
@@ -42,13 +40,7 @@ export const defineComponent = ({
       constructor() {
         super();
 
-        // Execute beforeCreate hook
-        this.runLifeCycleMethod(this.hookBeforeCreate);
-
         currentInstance = this;
-
-        // Execute created hook
-        this.runLifeCycleMethod(this.hookCreated);
 
         const props = (this.props = reactive({}));
         propDefs.forEach((key) => {
@@ -81,8 +73,6 @@ export const defineComponent = ({
           render(root, template());
         };
 
-        // Execute beforeMount hook
-        this.runLifeCycleMethod(this.hookBeforeMount);
         this.isMounted = false;
 
         this.effectCallback = () => {
@@ -96,6 +86,8 @@ export const defineComponent = ({
             // Execute updated hook
             this.runLifeCycleMethod(this.hookUpdated);
           } else {
+            // Execute beforeMount hook
+            this.runLifeCycleMethod(this.hookBeforeMount);
             this.isMounted = true;
           }
         };
