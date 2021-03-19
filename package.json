@@ -46,5 +46,9 @@
     "dist"
   ],
   "author": "Andrew Beng",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrewbeng89/vue-uhtml.git"
+  }
 }
