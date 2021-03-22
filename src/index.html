@@ -21,16 +21,32 @@
   <!-- vue-hyper -->
   <my-component></my-component>
   
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://gitcdn.link/cdn/andrewbeng89/staex/6a175d9ad19ee58486bc2c33ce8597c9bc2ab580/dist/index.browser.js"></script>
   <script>
     // Web Component
     const myInput = document.querySelector("#myInput");
     myInput.addEventListener("input", console.log);
     var onInput = console.log;
 
+    const { reactive, readonly } = Vue;
+    const store = Staex.defineStore({ reactive, readonly })({
+      state: {
+        inputValue: "Hello, Vue!",
+        isDialogOpen: false
+      },
+      actions: {
+        setInputValue: (state, inputValue) => {
+          state.inputValue = inputValue;
+        },
+        setIsDialogOpen: (state, isDialogOpen) => {
+          state.isDialogOpen = isDialogOpen;
+        }
+      }
+    });
+
     // Vue
-    Vue.config.ignoredElements = ["ui-input"];
-    Vue.component("my-app", {
+    const myApp = {
       template: `
         <div>
           <ui-input
@@ -39,8 +55,8 @@
             label="My Vue Input"
           />
           <pre v-if="inputValue">message: {{ inputValue }}</pre>
-          <button @click="isDialogOpen = true">Open dialog</button>
-          <ui-dialog v-if="isDialogOpen" @close="isDialogOpen = false">
+          <button @click="onToggle">Open dialog</button>
+          <ui-dialog v-if="isDialogOpen" @close="onToggle">
             <span slot="header">Dialog header</span>
             Dialog content
             <span slot="footer">Dialog footer</span>
@@ -48,22 +64,22 @@
           <pre>isDialogOpen: {{ isDialogOpen }}</pre>
         </div>
       `,
-      methods: {
-        onInput({ target }) {
-          this.inputValue = target.value;
-        }
-      },
-      data() {
-        return {
-          inputValue: "Hello, Vue!",
-          isDialogOpen: false
-        };
-      }
-    });
+      setup() {
+        const inputValue = Vue.computed(() => store.state.inputValue);
+        const isDialogOpen = Vue.computed(() => store.state.isDialogOpen);
 
-    const vueApp = new Vue({
-      el: "#vueApp"
-    });
+        const onInput = ({ target }) => {
+          store.dispatch("setInputValue", target.value);
+        };
+
+        const onToggle = () => {
+          store.dispatch("setIsDialogOpen", !store.state.isDialogOpen);
+        };
+
+        return { inputValue, isDialogOpen, onInput, onToggle };
+      }
+    };
+    Vue.createApp(myApp).mount("#vueApp");
   </script>
   <script type="module">
     import { createElement, render, Component, h } from "https://unpkg.com/preact@latest?module";
