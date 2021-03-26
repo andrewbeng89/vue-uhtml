@@ -71,5 +71,5 @@ defineComponent({
   },
   shadowMode: "open",
   useShadowDOM: false,
-  propDefs: ["msg"],
+  props: { msg: String },
 });
