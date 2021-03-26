@@ -71,7 +71,10 @@ defineComponent({
       <button onclick=${increase}>increase</button>
     `;
   },
-  propDefs: ["msg"],
+  prop: {
+    type: String,
+    default: ""
+  },
   useShadowDOM: false,
 });
 </script>
