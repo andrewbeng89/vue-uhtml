@@ -102,14 +102,33 @@ export const defineUiInput = (
       `;
     },
 
-    propDefs: [
-      "value",
-      "label",
-      "placeholder",
-      "autofocus",
-      "readonly",
-      "autocomplete",
-    ],
+    props: {
+      value: {
+        type: String,
+        default: "",
+      },
+      label: {
+        type: String,
+        default: "",
+      },
+      placeholder: {
+        type: String,
+        default: "",
+      },
+      autofocus: {
+        type: Boolean,
+        default: false,
+      },
+      chevron: {
+        default: false,
+      },
+      readonly: {
+        default: false,
+      },
+      autocomplete: {
+        default: "on",
+      },
+    },
 
     useShadowDOM: true,
   });

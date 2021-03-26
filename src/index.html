@@ -79,7 +79,9 @@
         return { inputValue, isDialogOpen, onInput, onToggle };
       }
     };
-    Vue.createApp(myApp).mount("#vueApp");
+    const app = Vue.createApp(myApp);
+    app.config.isCustomElement = tag => tag.match(/^(ui-input|ui-dialog)$/);
+    app.mount("#vueApp");
   </script>
   <script type="module">
     import { createElement, render, Component, h } from "https://unpkg.com/preact@latest?module";
@@ -140,7 +142,7 @@
       setup: ({ props }) => () => html`
         <pre>message: ${props.message}</pre>
       `,
-      propDefs: ["message"]
+      props: ["message"]
     });
 
     defineComponent({
@@ -203,7 +205,12 @@
         `;
       },
       useShadowDOM: false,
-      propDefs: ["msg"],
+      props: {
+        msg: {
+          type: String,
+          required: true
+        }
+      },
     });
   </script>
 </body>
