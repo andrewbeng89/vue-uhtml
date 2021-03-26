@@ -71,7 +71,7 @@ defineComponent({
       <button onclick=${increase}>increase</button>
     `;
   },
-  prop: {
+  props: {
     type: String,
     default: ""
   },
