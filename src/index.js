@@ -1,5 +1,6 @@
 import { render } from "uhtml";
 import { reactive, effect } from "@vue/reactivity";
+import { parsePropDefs, getPropValidators, validateProp } from "./utils";
 
 let currentInstance;
 
@@ -22,7 +23,7 @@ export const useEmit = (ctx) => (event) => {
 export const defineComponent = ({
   name,
   setup,
-  propDefs = [],
+  props = [],
   useShadowDOM = true,
   shadowMode = "closed",
 }) => {
@@ -30,7 +31,7 @@ export const defineComponent = ({
     name,
     class extends HTMLElement {
       static get observedAttributes() {
-        return propDefs;
+        return parsePropDefs(props);
       }
 
       runLifeCycleMethod(hooks) {
@@ -42,13 +43,25 @@ export const defineComponent = ({
 
         currentInstance = this;
 
-        const props = (this.props = reactive({}));
-        propDefs.forEach((key) => {
+        this.props = reactive({});
+        const propValidators = getPropValidators(props);
+        parsePropDefs(props).forEach((key) => {
           Object.defineProperty(this, key, {
             get() {
               return this.props[key];
             },
             set(value) {
+              if (
+                propValidators &&
+                !validateProp(value, propValidators[key].type)
+              ) {
+                throw new Error(
+                  `Invalid property type of ${key}: expected instance of ${
+                    propValidators[key].type.name
+                  }, but received a ${typeof value}`
+                );
+              }
+
               this.props[key] = value;
             },
           });
@@ -57,7 +70,7 @@ export const defineComponent = ({
         const slots = useShadowDOM ? (this.slots = reactive({})) : undefined;
 
         const template = (this.template = setup.call(this, {
-          props,
+          props: this.props,
           ctx: this,
           emit: useEmit(this),
           refs: reactive({}),
@@ -107,6 +120,17 @@ export const defineComponent = ({
             this.slots[slot.getAttribute("slot")] = slot;
           });
         }
+
+        const propValidators = getPropValidators(props);
+        parsePropDefs(props).forEach((key) => {
+          if (
+            propValidators &&
+            propValidators[key].required &&
+            !this.props[key]
+          ) {
+            throw new Error(`Missing required property: ${key}`);
+          }
+        });
       }
 
       disconnectedCallback() {
@@ -121,6 +145,24 @@ export const defineComponent = ({
         } catch (e) {
           val = newValue;
         }
+
+        const propValidators = getPropValidators(props);
+
+        if (propValidators && !validateProp(val, propValidators[name].type)) {
+          throw new Error(
+            `Invalid property type of ${name}: expected instance of ${
+              propValidators[name].type.name
+            }, but received a ${typeof val}`
+          );
+        }
+
+        if (propValidators && propValidators.default && !val) {
+          val =
+            propValidators.default instanceof Function
+              ? propValidators.default()
+              : propValidators.default;
+        }
+
         this[name] = val;
       }
     }
