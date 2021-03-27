@@ -47,6 +47,13 @@ defineComponent({
 defineComponent({
   name: "my-child",
 
+  props: {
+    msg: {
+      type: String,
+      default: "",
+    },
+  },
+
   setup: ({ props }) => {
     const state = reactive({ count: 0 });
     const increase = () => {
@@ -70,10 +77,6 @@ defineComponent({
       <p id="count">${state.count}</p>
       <button onclick=${increase}>increase</button>
     `;
-  },
-  props: {
-    type: String,
-    default: ""
   },
   useShadowDOM: false,
 });
