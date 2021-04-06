@@ -51,6 +51,9 @@ export const getPropValidators = (props) => {
                 default: prop.default,
               }
             : {}),
+          ...(prop.validator && prop.validator instanceof Function
+            ? { validator: prop.validator }
+            : {}),
         };
       }
     });
@@ -61,9 +64,15 @@ export const getPropValidators = (props) => {
   }
 };
 
-export const validateProp = (value, type) => {
+export const validateProp = (value, type, validator) => {
+  if (validator) {
+    return validator(value);
+  }
+
   if (type === Object || type === Array) {
     return value instanceof type;
+  } else if (type instanceof Array) {
+    return type.some((t) => validateProp(value, t));
   }
 
   return typeof value === type.name.toLowerCase();
