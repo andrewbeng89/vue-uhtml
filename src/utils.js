@@ -20,7 +20,22 @@ export const getPropValidators = (props) => {
     const propKeys = Object.keys(props);
     propKeys.forEach((key) => {
       const prop = props[key];
-      if (prop.prototype && prop.prototype.constructor) {
+
+      const isTypeDefinition = prop.prototype && prop.prototype.constructor;
+      const isArrayTypeDefinition =
+        prop instanceof Array &&
+        prop.every((t) => t.prototype && t.prototype.constructor);
+
+      if (
+        prop.type === Function ||
+        (isArrayTypeDefinition && prop.some((type) => type === Function))
+      ) {
+        throw new Error(
+          `Properties should be JSON serializable: please change type of prop ${key} from Function.`
+        );
+      }
+
+      if (isTypeDefinition || isArrayTypeDefinition) {
         result[key] = {
           type: prop,
         };
