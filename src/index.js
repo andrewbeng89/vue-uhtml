@@ -148,7 +148,14 @@ export const defineComponent = ({
 
         const propValidators = getPropValidators(props);
 
-        if (propValidators && !validateProp(val, propValidators[name].type)) {
+        if (
+          propValidators &&
+          !validateProp(
+            val,
+            propValidators[name].type,
+            propValidators[name].validator
+          )
+        ) {
           throw new Error(
             `Invalid property type of ${name}: expected instance of ${
               propValidators[name].type.name
