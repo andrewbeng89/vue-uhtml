@@ -1,6 +1,6 @@
 {
   "name": "vue-uhtml",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "scripts": {
     "dev": "NODE_ENV=dev yarn rollup -c -w",
     "build": "NODE_ENV=production yarn rollup -c && yarn test",
