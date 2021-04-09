@@ -90,5 +90,9 @@ export const validateProp = (value, type, validator) => {
     return type.some((t) => validateProp(value, t));
   }
 
+  if (type === Boolean && value === "") {
+    return true;
+  }
+
   return typeof value === type.name.toLowerCase();
 };

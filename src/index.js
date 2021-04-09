@@ -62,6 +62,14 @@ export const defineComponent = ({
                 );
               }
 
+              if (
+                propValidators &&
+                propValidators[key].type === Boolean &&
+                value === ""
+              ) {
+                value = true;
+              }
+
               this.props[key] = value;
             },
           });
