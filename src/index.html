@@ -7,7 +7,7 @@
 </head>
 <body>
 
-  <my-component></my-component>
+  <my-component message="hello, vue-uhtml"></my-component>
 
   <!-- Modern Browsers -->
   <script type="module">
@@ -24,13 +24,16 @@
 
     defineComponent({
       name: "my-component",
-      setup: ({ emit }) => {
+      props: {
+        message: String,
+      },
+      setup: ({ emit, props }) => {
         const state = reactive({
           sum: 1,
         });
         const add = () => {
           state.sum = state.sum + 1;
-          emit(new CustomEvent("add", { detail: state.show }));
+          emit(new CustomEvent("add", { detail: state.sum }));
         };
 
         onBeforeMount(() => { console.log("my-component: beforeMount") });
@@ -43,8 +46,10 @@
           html`
             <button onclick=${add}>add</button>
             <p>
-              <span>${state.sum}</span>
+              <span>sum: ${state.sum}</span>
             </p>
+            <p>
+              <span>message: ${props.message}<span></p>
           `;
       },
     });
@@ -56,13 +61,16 @@
   <script nomodule>
     VueUhtml.defineComponent({
       name: "my-component",
+      props: {
+        message: String,
+      },
       setup: function(ctx) {
         const state = VueUhtml.reactive({
           sum: 1,
         });
         function add() {
           state.sum = state.sum + 1;
-          ctx.emit(new CustomEvent("add", { detail: state.show }));
+          ctx.emit(new CustomEvent("add", { detail: state.sum }));
         };
 
         VueUhtml.onBeforeMount(function() { console.log("my-component: beforeMount") });
@@ -75,11 +83,13 @@
           return VueUhtml.html(
             [
               "<button onclick=",
-              ">add</button> <p> <span>",
-              "</span> </p>",
+              ">add</button> <p> <span>sum: ",
+              "</span> </p> <p> <span>message: ",
+              "</span> </p>"
             ],
             add,
-            state.sum
+            state.sum,
+            ctx.props.message
           );
         }
       },
