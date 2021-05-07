@@ -83,6 +83,52 @@ defineComponent({
 </script>
 ```
 
+## Legacy JS compatibility (IE 11 🙃)
+
+```html
+<my-component message="hello, vue-uhtml"></my-component>
+
+<script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-bundle.js" nomodule></script>
+<script src="https://unpkg.com/vue-uhtml/dist/index.legacy.js" nomodule></script>
+<script nomodule>
+  VueUhtml.defineComponent({
+    name: "my-component",
+    props: {
+      message: String,
+    },
+    setup: function(ctx) {
+      const state = VueUhtml.reactive({
+        sum: 1,
+      });
+      function add() {
+        state.sum = state.sum + 1;
+        ctx.emit(new CustomEvent("add", { detail: state.sum }));
+      };
+
+      VueUhtml.onBeforeMount(function() { console.log("my-component: beforeMount") });
+      VueUhtml.onMounted(function() { console.log("my-component: mounted") });
+      VueUhtml.onBeforeUpdate(function() { console.log("my-component: beforeUpdate") });
+      VueUhtml.onUpdated(function() { console.log("my-component: updated") });
+      VueUhtml.onUnmounted(function() { console.log("my-component: unmounted") });
+
+      return function() {
+        return VueUhtml.html(
+          [
+            "<button onclick=",
+            ">add</button> <p> <span>sum: ",
+            "</span> </p> <p> <span>message: ",
+            "</span> </p>"
+          ],
+          add,
+          state.sum,
+          ctx.props.message
+        );
+      }
+    },
+  });
+</script>
+```
+
 ## Tests
 ```sh
 > yarn test
