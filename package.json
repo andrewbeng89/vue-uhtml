@@ -40,8 +40,9 @@
     "tailwindcss": "^2.0.4",
     "uhtml": "^2.6.1"
   },
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
+  "exports": "./dist/index.esm.js",
+  "main": "./dist/index.legacy.js",
+  "module": "./dist/index.esm.js",
   "files": [
     "dist"
   ],
