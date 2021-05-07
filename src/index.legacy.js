@@ -1,3 +1,4 @@
+import "function.name-polyfill";
 import { reactive, watchEffect as effect } from "vue-demi";
 import createDefineComponent from "./main";
 
