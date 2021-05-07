@@ -1,4 +1,4 @@
-import { reactive, effect } from "@vue/reactivity";
+import { reactive, watchEffect as effect } from "vue-demi";
 import createDefineComponent from "./main";
 
 export const defineComponent = createDefineComponent({ reactive, effect });
@@ -12,4 +12,4 @@ export {
   useEmit,
 } from "./main";
 export * from "uhtml";
-export * from "@vue/reactivity";
+export * from "vue-demi";
