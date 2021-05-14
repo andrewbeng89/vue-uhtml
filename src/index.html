@@ -23,17 +23,34 @@
     } from "./index.esm.js";
 
     defineComponent({
-      name: "my-component",
+      name: "my-message",
       props: {
         message: String,
       },
+      setup: ({ props }) =>
+        () => html`
+          <p>
+            <span>Message: ${props.message}</span>  
+          </p>
+        `
+    });
+
+    defineComponent({
+      name: "my-component",
       setup: ({ emit, props }) => {
         const state = reactive({
           sum: 1,
+          message: "hello, vue-uhtml!"
         });
+
         const add = () => {
           state.sum = state.sum + 1;
           emit(new CustomEvent("add", { detail: state.sum }));
+        };
+
+        const oninput = ({ target }) => {
+          state.message = target.value;
+          emit(new CustomEvent("message", { detail: target.value }));
         };
 
         onBeforeMount(() => { console.log("my-component: beforeMount") });
@@ -48,8 +65,8 @@
             <p>
               <span>sum: ${state.sum}</span>
             </p>
-            <p>
-              <span>message: ${props.message}<span></p>
+            <input type="text" oninput=${oninput} value=${state.message}>
+            <my-message message=${state.message}></my-message>
           `;
       },
     });
@@ -60,6 +77,24 @@
   <script src="index.legacy.js" nomodule></script>
   <script nomodule>
     VueUhtml.defineComponent({
+      name: "my-message",
+      props: {
+        message: String,
+      },
+      setup: function(ctx) {
+        return function() {
+          return VueUhtml.html(
+            [
+              "<p> <span>Message: ",
+              "</span> </p>"
+            ],
+            ctx.props.message
+          );
+        }
+      }
+    });
+
+    VueUhtml.defineComponent({
       name: "my-component",
       props: {
         message: String,
@@ -67,10 +102,17 @@
       setup: function(ctx) {
         const state = VueUhtml.reactive({
           sum: 1,
+          message: "hello, vue-uhtml!"
         });
+
         function add() {
           state.sum = state.sum + 1;
           ctx.emit(new CustomEvent("add", { detail: state.sum }));
+        };
+
+        function oninput(event) {
+          ctx.emit(new CustomEvent("message", { detail: event.target.value }));
+          state.message = event.target.value;
         };
 
         VueUhtml.onBeforeMount(function() { console.log("my-component: beforeMount") });
@@ -84,12 +126,16 @@
             [
               "<button onclick=",
               ">add</button> <p> <span>sum: ",
-              "</span> </p> <p> <span>message: ",
-              "</span> </p>"
+              "</span> </p> <input type='text' oninput=",
+              " value=",
+              "> <my-message message=",
+              "></my-message>"
             ],
             add,
             state.sum,
-            ctx.props.message
+            oninput,
+            state.message,
+            state.message
           );
         }
       },
