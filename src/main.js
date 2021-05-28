@@ -19,7 +19,7 @@ export const useEmit = (ctx) => (event) => {
   ctx.dispatchEvent(event);
 };
 
-export default ({ reactive, effect }) => ({
+export default ({ reactive, effect, isLegacy = false }) => ({
   name,
   setup,
   props = [],
@@ -178,6 +178,8 @@ export default ({ reactive, effect }) => ({
         }
 
         this[name] = val;
+
+        if (isLegacy) this.effectCallback();
       }
     }
   );
