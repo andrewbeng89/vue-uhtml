@@ -83,7 +83,7 @@ defineComponent({
 </script>
 ```
 
-## Legacy JS compatibility (IE 11 🙃)
+## Legacy JS compatibility (and IE 11 🙃)
 
 ```html
 <my-component message="hello, vue-uhtml"></my-component>
@@ -128,6 +128,11 @@ defineComponent({
   });
 </script>
 ```
+
+### Limitations of legacy build
+The legacy JS implementation `dist/index.legacy.js` relies on the `vue-demi` utility to resolve incompatible Vue 3.x reactivity features to `@vue/composition-api`. Given this dependency, the same limitations from `@vue/composition-api` apply to `vue-uhtml`, which are documented [here](https://github.com/vuejs/composition-api#limitations).
+
+As a result of the internal differences and limitations between `@vue/reactivity` and `@vue/composition-api`, the rendering performance of the legacy build is not optimal in some areas. e.g. internal property changes during `attributeChangedCallback` does not result in an `effect`; the `effectCallback()` has to be manually called in this case to call applied lifecycle hooks and `render()`.
 
 ## Tests
 ```sh
