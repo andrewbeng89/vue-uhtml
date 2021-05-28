@@ -1,7 +1,4 @@
 import commonjs from "@rollup/plugin-commonjs";
-import postcss from "rollup-plugin-postcss";
-import postcssImport from "postcss-import";
-import tailwind from "tailwindcss";
 import replace from "@rollup/plugin-replace";
 import copy from "rollup-plugin-copy";
 import serve from "rollup-plugin-serve";
@@ -127,23 +124,78 @@ export default [
   ...(process.env.NODE_ENV === "dev"
     ? [
         {
-          input: "src/ui-components.js",
-          output: {
-            file:
-              process.env.NODE_ENV === "dev"
-                ? "dev/ui-components.js"
-                : "dist/ui-components.js",
-          },
+          input: "src/dev.js",
+          output: [
+            {
+              file: "dev/dev.js",
+              sourcemap: true,
+              format: "esm",
+              plugins: [
+                getBabelOutputPlugin({
+                  presets: [["@babel/preset-modules"]],
+                }),
+              ],
+            },
+          ],
           plugins: [
-            nodeResolve(),
-            postcss({
-              plugins: [tailwind(), postcssImport()],
-              module: false,
-              minimize: true,
+            pluginWatch(),
+            commonjs(),
+            babel({
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    targets: { esmodules: true },
+                    bugfixes: true,
+                    loose: true,
+                  },
+                ],
+              ],
+              babelHelpers: "bundled",
             }),
             replace({
               "process.env.NODE_ENV": JSON.stringify("production"),
             }),
+            nodeResolve(),
+          ],
+        },
+        {
+          input: "src/dev.legacy.js",
+          output: [
+            {
+              file: "dev/dev.legacy.js",
+              sourcemap: true,
+              name: "VueUhtml",
+              entryFileNames: "[name].legacy.js",
+              chunkFileNames: "[name]-[hash].legacy.js",
+              format: "umd",
+              plugins: [
+                getBabelOutputPlugin({
+                  presets: [["@babel/preset-env"]],
+                  allowAllFormats: true,
+                }),
+              ],
+            },
+          ],
+          plugins: [
+            commonjs(),
+            babel({
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    targets: { esmodules: true },
+                    bugfixes: true,
+                    loose: true,
+                  },
+                ],
+              ],
+              babelHelpers: "bundled",
+            }),
+            replace({
+              "process.env.NODE_ENV": JSON.stringify("production"),
+            }),
+            nodeResolve(),
             terser(),
           ],
         },
