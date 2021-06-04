@@ -2,7 +2,11 @@ import "function.name-polyfill";
 import { reactive, watchEffect as effect } from "vue-demi";
 import createDefineComponent from "./main";
 
-export const defineComponent = createDefineComponent({ reactive, effect });
+export const defineComponent = createDefineComponent({
+  reactive,
+  effect,
+  isLegacy: true,
+});
 
 export {
   onBeforeMount,
