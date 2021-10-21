@@ -7,6 +7,8 @@ const createLifecycleMethod = (name) => (hook) => {
   if (currentInstance) {
     (currentInstance[name] || (currentInstance[name] = [])).push(hook);
   }
+
+  if (!currentInstance.isMounted && name === "hookBeforeMount") hook();
 };
 
 export const onBeforeMount = createLifecycleMethod("hookBeforeMount");
@@ -109,14 +111,9 @@ export default ({ reactive, effect, isLegacy = false }) => ({
             this.isMounted = true;
           }
         };
-
-        currentInstance = null;
       }
 
       connectedCallback() {
-        // Execute beforeMount hook
-        this.runLifeCycleMethod(this.hookBeforeMount);
-
         effect(this.effectCallback);
 
         // Execute mounted hook
