@@ -57,5 +57,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/andrewbeng89/vue-uhtml.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
