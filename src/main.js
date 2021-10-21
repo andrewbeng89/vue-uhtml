@@ -109,8 +109,6 @@ export default ({ reactive, effect, isLegacy = false }) => ({
             this.isMounted = true;
           }
         };
-
-        currentInstance = null;
       }
 
       connectedCallback() {
