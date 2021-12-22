@@ -1431,24 +1431,24 @@
   resolved "https://registry.yarnpkg.com/@ungap/create-content/-/create-content-0.3.1.tgz#b1504143d408f04e85ba38d9a20aace142142090"
   integrity sha512-SHzmtS3KHG+gzNhO/E0tFqs12vNC5H3YxpF8a8AeodB/iX3ZYcxzS8vgWXbDGmHy6bgl7m+f9+wDKBdqOVT5FA==
 
-"@vue/composition-api@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.2.4.tgz#4befcefc0e1c570fd0879a2d8b8f901f3a4e35d0"
-  integrity sha512-8LVV6O4slsroBhRKxly3em5H3D5Q+ggPG75lcilh5MfLGs69LEdwm6dKhSOXtQoSyMGF4Rq30E4DcouopM8Rxg==
+"@vue/composition-api@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.4.2.tgz#d2b2b252c6b73c5b8149619ac2da0b7b2474663c"
+  integrity sha512-EqybqmMq835GISvlQXdDaV8dsbunpdmhClrnAqUJZLyxxV9pQXQYRtNDf+0e+fEwMfimLIsv7YmbKCbqxGRqXg==
   dependencies:
-    tslib "^2.3.0"
+    tslib "^2.3.1"
 
-"@vue/reactivity@^3.2.20":
-  version "3.2.20"
-  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.2.20.tgz#81fe1c368e7f20bc0ec1dec1045bbee253582de8"
-  integrity sha512-nSmoLojUTk+H8HNTAkrUduB4+yIUBK2HPihJo2uXVSH4Spry6oqN6lFzE5zpLK+F27Sja+UqR9R1+/kIOsHV5w==
+"@vue/reactivity@^3.2.26":
+  version "3.2.26"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.2.26.tgz#d529191e581521c3c12e29ef986d4c8a933a0f83"
+  integrity sha512-h38bxCZLW6oFJVDlCcAiUKFnXI8xP8d+eO0pcDxx+7dQfSPje2AO6M9S9QO6MrxQB7fGP0DH0dYQ8ksf6hrXKQ==
   dependencies:
-    "@vue/shared" "3.2.20"
+    "@vue/shared" "3.2.26"
 
-"@vue/shared@3.2.20":
-  version "3.2.20"
-  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.20.tgz#53746961f731a8ea666e3316271e944238dc31db"
-  integrity sha512-FbpX+hD5BvXCQerEYO7jtAGHlhAkhTQ4KIV73kmLWNlawWhTiVuQxizgVb0BOkX5oG9cIRZ42EG++d/k/Efp0w==
+"@vue/shared@3.2.26":
+  version "3.2.26"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.26.tgz#7acd1621783571b9a82eca1f041b4a0a983481d9"
+  integrity sha512-vPV6Cq+NIWbH5pZu+V+2QHE9y1qfuTq49uNWw4f7FDEeZaDU2H2cx5jcUZOAKW7qTrUS4k6qZPbMy1x4N96nbA==
 
 "@web/browser-logs@^0.2.0", "@web/browser-logs@^0.2.1":
   version "0.2.1"
@@ -7034,7 +7034,7 @@ tr46@^2.0.2:
   dependencies:
     punycode "^2.1.1"
 
-tslib@^2.3.0:
+tslib@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
@@ -7126,24 +7126,24 @@ udomdiff@^1.1.0:
   resolved "https://registry.yarnpkg.com/udomdiff/-/udomdiff-1.1.0.tgz#1d0c4741b93a2ffd10728ca4cea15b277cc3082f"
   integrity sha512-aqjTs5x/wsShZBkVagdafJkP8S3UMGhkHKszsu1cszjjZ7iOp86+Qb3QOFYh01oWjPMy5ZTuxD6hw5uTKxd+VA==
 
-uhandlers@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/uhandlers/-/uhandlers-0.5.0.tgz#f392961ae42f404118e48125f5fdc3fff88dcf87"
-  integrity sha512-k62zN6xdC97MbVUCtGyq5Pm+vYwf4vJ5z/KNo4bCEclZzsyi5T5pFrJxHVYqdht+3diCyK7KveUsJPXFJajYfQ==
+uhandlers@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/uhandlers/-/uhandlers-0.6.0.tgz#c9ad95456ac39110759582f847d3fb98e865c523"
+  integrity sha512-f3cFZ07b9R+7TJhVAzhuSCNKzKxSQzirVpNYfDpNkYedTBRhsbpQ+xcuz8dkPgkFjWW66ReiMYWTQq3KHXn0Cg==
   dependencies:
     uarray "^1.0.0"
 
-uhtml@^2.7.6:
-  version "2.7.6"
-  resolved "https://registry.yarnpkg.com/uhtml/-/uhtml-2.7.6.tgz#5d0c1ac94561574c19afec3505a0d2df796677d2"
-  integrity sha512-lq5Lb4zKstF0VCLfYlTtkHClMCyC5j8kFB3wWGZlhvMvRy/rd+D7q/bpcKfDibuuB1gRVvAPYHQWetNRyqTW4g==
+uhtml@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/uhtml/-/uhtml-2.8.0.tgz#b995c4b959b84f7b5d52593ef80875d94c76574f"
+  integrity sha512-UVtSfxRh06r06xQguEyWyQF2E6x9CbtxqRTG7gLunrTKO4y223+yRkrB0wiPFSaU5qdscDO5LAi65oFQk839zg==
   dependencies:
     "@ungap/create-content" "^0.3.1"
     async-tag "^0.2.0"
     jsx2tag "^0.3.0"
     uarray "^1.0.0"
     udomdiff "^1.1.0"
-    uhandlers "^0.5.0"
+    uhandlers "^0.6.0"
     umap "^1.0.2"
     uparser "^0.2.1"
     uwire "^1.1.0"
@@ -7345,15 +7345,15 @@ vendors@^1.0.0:
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
   integrity sha512-/juG65kTL4Cy2su4P8HjtkTxk6VmJDiOPBufWniqQ6wknac6jNiXS9vU+hO3wgusiyqWlzTbVHi0dyJqRONg3w==
 
-vue-demi@^0.11.4:
-  version "0.11.4"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.11.4.tgz#6101992fe4724cf5634018a16e953f3052e94e2a"
-  integrity sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==
+vue-demi@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.12.1.tgz#f7e18efbecffd11ab069d1472d7a06e319b4174c"
+  integrity sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==
 
-vue@^2.6.12:
-  version "2.6.12"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
-  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+vue@^2.6.14:
+  version "2.6.14"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
+  integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
 wcwidth@^1.0.1:
   version "1.0.1"
