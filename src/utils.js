@@ -90,7 +90,7 @@ export const validateProp = (value, type, validator) => {
     return type.some((t) => validateProp(value, t));
   }
 
-  if (type === Boolean && value === "") {
+  if ((type === Boolean && value === "") || value === null) {
     return true;
   }
 

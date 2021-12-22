@@ -63,12 +63,17 @@ export default ({ reactive, effect, isLegacy = false }) => ({
                 );
               }
 
-              if (
-                propValidators &&
-                propValidators[key].type === Boolean &&
-                value === ""
-              ) {
-                value = true;
+              if (propValidators && propValidators[key].type === Boolean) {
+                switch (value) {
+                  case "":
+                    value = true;
+                    break;
+                  case null:
+                    value = false;
+                    break;
+                  default:
+                    break;
+                }
               }
 
               this.props[key] = value;
