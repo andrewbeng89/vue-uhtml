@@ -17,6 +17,20 @@ describe("MyComponent", () => {
     expect(el.shadowRoot.querySelector("span")).lightDom.to.equal("hello");
   });
 
+  it('does not render "#secret" by default', async () => {
+    const el = await fixture(html` <my-component></my-component> `);
+
+    expect(el.shadowRoot.querySelector("#secret")).to.be.null;
+  });
+
+  it('has a `span` "my secret" when `show-secret` is set', async () => {
+    const el = await fixture(html` <my-component show-secret></my-component> `);
+
+    expect(el.shadowRoot.querySelector("#secret")).lightDom.to.equal(
+      "my secret"
+    );
+  });
+
   it("child component is rendered when toggle button is clicked", async () => {
     const el = await fixture(html` <my-component></my-component> `);
     const toggleButton = el.shadowRoot.querySelector("button");

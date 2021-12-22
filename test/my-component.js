@@ -11,7 +11,10 @@ import {
 
 defineComponent({
   name: "my-component",
-  setup: ({ emit }) => {
+  props: {
+    "show-secret": Boolean,
+  },
+  setup: ({ props, emit }) => {
     const state = reactive({
       text: "hello",
       show: false,
@@ -33,6 +36,7 @@ defineComponent({
     return () => html`
       <button onclick=${toggle}>toggle child</button>
       <p>
+        ${props["show-secret"] ? html`<span id="secret">my secret</span>` : ""}
         <span>${state.text}</span>
         <input value=${state.text} oninput=${onInput} />
       </p>
