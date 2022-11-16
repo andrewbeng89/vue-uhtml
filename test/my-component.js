@@ -7,7 +7,7 @@ import {
   onBeforeUpdate,
   onUpdated,
   onUnmounted,
-} from "../dist/index.esm";
+} from "../dist/index";
 
 defineComponent({
   name: "my-component",
