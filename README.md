@@ -78,7 +78,6 @@ defineComponent({
       <button onclick=${increase}>increase</button>
     `;
   },
-  useShadowDOM: false,
 });
 </script>
 ```
