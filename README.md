@@ -78,63 +78,21 @@ defineComponent({
       <button onclick=${increase}>increase</button>
     `;
   },
-  useShadowDOM: false,
 });
 </script>
 ```
 
-## Legacy JS compatibility (and IE 11 🙃)
-
-```html
-<my-component message="hello, vue-uhtml"></my-component>
-
-<script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-bundle.js" nomodule></script>
-<script src="https://unpkg.com/vue-uhtml/dist/index.legacy.js" nomodule></script>
-<script nomodule>
-  VueUhtml.defineComponent({
-    name: "my-component",
-    props: {
-      message: String,
-    },
-    setup: function(ctx) {
-      const state = VueUhtml.reactive({
-        sum: 1,
-      });
-      function add() {
-        state.sum = state.sum + 1;
-        ctx.emit(new CustomEvent("add", { detail: state.sum }));
-      };
-
-      VueUhtml.onBeforeMount(function() { console.log("my-component: beforeMount") });
-      VueUhtml.onMounted(function() { console.log("my-component: mounted") });
-      VueUhtml.onBeforeUpdate(function() { console.log("my-component: beforeUpdate") });
-      VueUhtml.onUpdated(function() { console.log("my-component: updated") });
-      VueUhtml.onUnmounted(function() { console.log("my-component: unmounted") });
-
-      return function() {
-        return VueUhtml.html(
-          [
-            "<button onclick=",
-            ">add</button> <p> <span>sum: ",
-            "</span> </p> <p> <span>message: ",
-            "</span> </p>"
-          ],
-          add,
-          state.sum,
-          ctx.props.message
-        );
-      }
-    },
-  });
-</script>
+## Develop
+```sh
+npm run dev
 ```
 
-### Limitations of legacy build
-The legacy JS implementation `dist/index.legacy.js` relies on the `vue-demi` utility to resolve incompatible Vue 3.x reactivity features to `@vue/composition-api`. Given this dependency, the same limitations from `@vue/composition-api` apply to `vue-uhtml`, which are documented [here](https://github.com/vuejs/composition-api#limitations).
-
-As a result of the internal differences and limitations between `@vue/reactivity` and `@vue/composition-api`, the rendering performance of the legacy build is not optimal in some areas. e.g. internal property changes during `attributeChangedCallback` does not result in an `effect`; the `effectCallback()` has to be manually called in this case to call applied lifecycle hooks and `render()`.
+## Build
+```sh
+npm run build
+```
 
 ## Tests
 ```sh
-> yarn test
+> npm run test
 ```
