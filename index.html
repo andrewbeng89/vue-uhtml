@@ -7,7 +7,17 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <my-component message="hello, vue-uhtml"></my-component>
+    <my-component>
+      <template shadowroot="open">
+        <button>add</button>
+        <button>Toggle child component</button>
+        <p>
+          <span>sum: 1</span>
+        </p>
+        <input type="text" value="hello, vue-uhtml!">
+        <slot></slot>
+      </template>
+    </my-component>
     <script type="module" src="/src/dev.js"></script>
   </body>
 </html>
