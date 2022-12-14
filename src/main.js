@@ -21,7 +21,7 @@ export const useEmit = (ctx) => (event) => {
   ctx.dispatchEvent(event);
 };
 
-export default ({ reactive, effect, isLegacy = false }) => ({
+export default ({ reactive, effect }) => ({
   name,
   setup,
   props = [],
@@ -175,8 +175,6 @@ export default ({ reactive, effect, isLegacy = false }) => ({
         }
 
         this[name] = val;
-
-        if (isLegacy) this.effectCallback();
       }
     }
   );
