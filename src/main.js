@@ -88,7 +88,7 @@ export default ({ reactive, effect, isLegacy = false }) => ({
 
         this.useShadowDOM = useShadowDOM;
         const root = (this.root = useShadowDOM
-          ? this.attachShadow({ mode: shadowMode })
+          ? this.attachInternals?.()?.shadowRoot || this.attachShadow({ mode: shadowMode })
           : this);
 
         this.render = () => {
