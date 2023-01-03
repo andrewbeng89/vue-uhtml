@@ -90,6 +90,15 @@ export default ({ reactive, effect }) => ({
         const root = (this.root = useShadowDOM
           ? this.attachInternals?.()?.shadowRoot || this.attachShadow({ mode: shadowMode })
           : this);
+        const initialStyles = Array.from(root.querySelectorAll("style"));
+
+        const prependInitialStyles = () => {
+          if (initialStyles.length) {
+            initialStyles.forEach(styleElement => {
+              this.root.prepend(styleElement);
+            });
+          }
+        }
 
         this.render = () => {
           render(root, template());
@@ -108,6 +117,7 @@ export default ({ reactive, effect }) => ({
             // Execute updated hook
             this.runLifeCycleMethod(this.hookUpdated);
           } else {
+            prependInitialStyles();
             this.isMounted = true;
           }
         };
