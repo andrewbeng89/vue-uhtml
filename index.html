@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
   </head>
+  <style>button { color: green; }</style>
   <body>
+    <button>light DOM button</button>
     <my-component>
       <template shadowroot="open">
+        <style>button { color: red; }</style>
         <button>add</button>
         <button>Toggle child component</button>
         <p>
