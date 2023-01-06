@@ -6,8 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
   </head>
+  <style>button { color: green; }</style>
   <body>
-    <my-component message="hello, vue-uhtml"></my-component>
+    <button>light DOM button</button>
+    <my-component>
+      <template shadowroot="open">
+        <style>button { color: red; }</style>
+        <button>add</button>
+        <button>Toggle child component</button>
+        <p>
+          <span>sum: 1</span>
+        </p>
+        <input type="text" value="hello, vue-uhtml!">
+        <slot></slot>
+      </template>
+    </my-component>
     <script type="module" src="/src/dev.js"></script>
   </body>
 </html>

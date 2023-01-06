@@ -21,7 +21,7 @@ export const useEmit = (ctx) => (event) => {
   ctx.dispatchEvent(event);
 };
 
-export default ({ reactive, effect, isLegacy = false }) => ({
+export default ({ reactive, effect }) => ({
   name,
   setup,
   props = [],
@@ -88,8 +88,17 @@ export default ({ reactive, effect, isLegacy = false }) => ({
 
         this.useShadowDOM = useShadowDOM;
         const root = (this.root = useShadowDOM
-          ? this.attachShadow({ mode: shadowMode })
+          ? this.attachInternals?.()?.shadowRoot || this.attachShadow({ mode: shadowMode })
           : this);
+        const initialStyles = Array.from(root.querySelectorAll("style"));
+
+        const prependInitialStyles = () => {
+          if (initialStyles.length) {
+            initialStyles.forEach(styleElement => {
+              this.root.prepend(styleElement);
+            });
+          }
+        }
 
         this.render = () => {
           render(root, template());
@@ -108,6 +117,7 @@ export default ({ reactive, effect, isLegacy = false }) => ({
             // Execute updated hook
             this.runLifeCycleMethod(this.hookUpdated);
           } else {
+            prependInitialStyles();
             this.isMounted = true;
           }
         };
@@ -175,8 +185,6 @@ export default ({ reactive, effect, isLegacy = false }) => ({
         }
 
         this[name] = val;
-
-        if (isLegacy) this.effectCallback();
       }
     }
   );
