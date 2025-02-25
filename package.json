@@ -26,8 +26,6 @@
     "vite": "^6.1.0"
   },
   "exports": "./dist/index.js",
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
   "files": [
     "dist"
   ],
