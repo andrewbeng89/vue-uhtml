@@ -1,15 +1,47 @@
-import { render } from "uhtml";
-import { parsePropDefs, getPropValidators, validateProp } from "./utils";
+/* eslint-disable @typescript-eslint/no-this-alias */
+import { Hole, render } from "uhtml";
+import {
+  parsePropDefs,
+  getPropValidators,
+  validateProp,
+  PropType,
+} from "./utils";
+import { reactive, effect, type Reactive } from "@vue/reactivity";
 
-let currentInstance;
+interface VueUHtmlCustomElement extends HTMLElement {
+  isMounted: boolean;
+  render: () => ((() => Hole) | Hole) | void;
+  root: ShadowRoot | this;
+  effectCallback: () => void;
+  ctx?: VueUHtmlCustomElement;
+  slots?: Reactive<object>;
+  hookBeforeMount?: (() => void)[];
+  hookMounted?: (() => void)[];
+  hookBeforeUpdate?: (() => void)[];
+  hookUpdated?: (() => void)[];
+  hookUnmounted?: (() => void)[];
+  emit?: (event: Event | CustomEvent) => void;
+  refs?: Reactive<object>;
+}
 
-const createLifecycleMethod = (name) => (hook) => {
-  if (currentInstance) {
-    (currentInstance[name] || (currentInstance[name] = [])).push(hook);
-  }
+let currentInstance: VueUHtmlCustomElement;
 
-  if (!currentInstance.isMounted && name === "hookBeforeMount") hook();
-};
+const createLifecycleMethod =
+  (
+    name:
+      | "hookBeforeMount"
+      | "hookMounted"
+      | "hookBeforeUpdate"
+      | "hookUpdated"
+      | "hookUnmounted",
+  ) =>
+  (hook: () => void) => {
+    if (currentInstance) {
+      (currentInstance![name] || (currentInstance[name] = [])).push(hook);
+    }
+
+    if (!currentInstance.isMounted && name === "hookBeforeMount") hook();
+  };
 
 export const onBeforeMount = createLifecycleMethod("hookBeforeMount");
 export const onMounted = createLifecycleMethod("hookMounted");
@@ -17,26 +49,53 @@ export const onBeforeUpdate = createLifecycleMethod("hookBeforeUpdate");
 export const onUpdated = createLifecycleMethod("hookUpdated");
 export const onUnmounted = createLifecycleMethod("hookUnmounted");
 
-export const useEmit = (ctx) => (event) => {
+export const useEmit = (ctx: EventTarget) => (event: Event | CustomEvent) => {
   ctx.dispatchEvent(event);
 };
 
-export default ({ reactive, effect }) => ({
+export default ({
   name,
   setup,
   props = [],
   useShadowDOM = true,
   shadowMode = "closed",
+}: {
+  name: string;
+  setup: (
+    this: VueUHtmlCustomElement,
+    args: {
+      props: Reactive<object>;
+      ctx: VueUHtmlCustomElement;
+      emit: (event: Event | CustomEvent) => void;
+      refs: Reactive<object>;
+      slots?: Reactive<object>;
+    },
+  ) => () => (() => Hole) | Hole;
+  props?: string[] | { [key: string]: PropType | (new () => object) };
+  useShadowDOM?: boolean;
+  shadowMode?: ShadowRootMode;
 }) => {
   customElements.define(
     name,
-    class extends HTMLElement {
+    class extends HTMLElement implements VueUHtmlCustomElement {
+      isMounted = false;
+      props: Reactive<object>;
+      render: () => void;
+      root: ShadowRoot | this;
+      effectCallback: () => void;
+      slots?: { [key: string]: Element };
+      hookBeforeMount?: (() => void)[];
+      hookMounted?: (() => void)[];
+      hookBeforeUpdate?: (() => void)[];
+      hookUpdated?: (() => void)[];
+      hookUnmounted?: (() => void)[];
+      [key: string]: unknown;
       static get observedAttributes() {
         return parsePropDefs(props);
       }
 
-      runLifeCycleMethod(hooks) {
-        hooks && hooks.forEach((hook) => hook());
+      runLifeCycleMethod(hooks: (() => void)[]) {
+        hooks?.forEach((hook) => hook());
       }
 
       constructor() {
@@ -54,18 +113,18 @@ export default ({ reactive, effect }) => ({
             set(value) {
               if (
                 propValidators &&
-                !validateProp(value, propValidators[key].type)
+                !validateProp(value, propValidators[key].type!)
               ) {
                 throw new Error(
                   `Invalid property type of ${key}: expected instance of ${
-                    propValidators[key].type.name
-                  }, but received a ${typeof value}`
+                    propValidators[key].type!.name
+                  }, but received a ${typeof value}`,
                 );
               }
 
               if (
                 propValidators &&
-                propValidators[key].type === Boolean &&
+                propValidators[key]!.type === Boolean &&
                 value === ""
               ) {
                 value = true;
@@ -88,34 +147,33 @@ export default ({ reactive, effect }) => ({
 
         this.useShadowDOM = useShadowDOM;
         const root = (this.root = useShadowDOM
-          ? this.attachInternals?.()?.shadowRoot || this.attachShadow({ mode: shadowMode })
+          ? this.attachInternals?.()?.shadowRoot ||
+            this.attachShadow({ mode: shadowMode, serializable: true })
           : this);
         const initialStyles = Array.from(root.querySelectorAll("style"));
 
         const prependInitialStyles = () => {
           if (initialStyles.length) {
-            initialStyles.forEach(styleElement => {
+            initialStyles.forEach((styleElement) => {
               this.root.prepend(styleElement);
             });
           }
-        }
+        };
 
         this.render = () => {
           render(root, template());
         };
 
-        this.isMounted = false;
-
         this.effectCallback = () => {
           if (this.isMounted) {
-            this.runLifeCycleMethod(this.hookBeforeUpdate);
+            this.runLifeCycleMethod(this.hookBeforeUpdate!);
           }
 
           this.render();
 
           if (this.isMounted) {
             // Execute updated hook
-            this.runLifeCycleMethod(this.hookUpdated);
+            this.runLifeCycleMethod(this.hookUpdated!);
           } else {
             prependInitialStyles();
             this.isMounted = true;
@@ -127,11 +185,11 @@ export default ({ reactive, effect }) => ({
         effect(this.effectCallback);
 
         // Execute mounted hook
-        this.runLifeCycleMethod(this.hookMounted);
+        this.runLifeCycleMethod(this.hookMounted!);
 
         if (this.useShadowDOM) {
           this.querySelectorAll("[slot]").forEach((slot) => {
-            this.slots[slot.getAttribute("slot")] = slot;
+            this.slots![slot.getAttribute("slot")!] = slot;
           });
         }
 
@@ -140,7 +198,7 @@ export default ({ reactive, effect }) => ({
           if (
             propValidators &&
             propValidators[key].required &&
-            !this.props[key]
+            !(this.props as { [key: string]: unknown })[key]
           ) {
             throw new Error(`Missing required property: ${key}`);
           }
@@ -149,13 +207,17 @@ export default ({ reactive, effect }) => ({
 
       disconnectedCallback() {
         // Execute unmounted hook
-        this.runLifeCycleMethod(this.hookUnmounted);
+        this.runLifeCycleMethod(this.hookUnmounted!);
       }
 
-      attributeChangedCallback(name, oldValue, newValue) {
+      attributeChangedCallback(
+        name: string,
+        _oldValue: unknown,
+        newValue: unknown,
+      ) {
         let val;
         try {
-          val = JSON.parse(newValue);
+          val = JSON.parse(newValue as string);
         } catch (e) {
           val = newValue;
         }
@@ -166,14 +228,14 @@ export default ({ reactive, effect }) => ({
           propValidators &&
           !validateProp(
             val,
-            propValidators[name].type,
-            propValidators[name].validator
+            propValidators[name].type!,
+            propValidators[name].validator,
           )
         ) {
           throw new Error(
             `Invalid property type of ${name}: expected instance of ${
-              propValidators[name].type.name
-            }, but received a ${typeof val}`
+              propValidators[name].type!.name
+            }, but received a ${typeof val}`,
           );
         }
 
@@ -186,6 +248,6 @@ export default ({ reactive, effect }) => ({
 
         this[name] = val;
       }
-    }
+    },
   );
 };

@@ -1,4 +1,4 @@
-export const parsePropDefs = (props) => {
+export const parsePropDefs = (props: string[] | { [key: string]: unknown }) => {
   if (props instanceof Array) {
     return props;
   }
@@ -10,16 +10,28 @@ export const parsePropDefs = (props) => {
   }
 };
 
-export const getPropValidators = (props) => {
+export interface PropType {
+  prototype?: {
+    constructor?: new () => object;
+  };
+  type?: new () => object;
+  default?: (() => object) | { constructor: new () => object };
+  required?: boolean;
+  validator?: (value: unknown) => boolean;
+}
+
+export const getPropValidators = (
+  props: unknown[] | { [key: string]: PropType | (new () => object) },
+) => {
   if (props instanceof Array) {
     return undefined;
   }
 
   try {
-    const result = {};
+    const result: { [key: string]: PropType } = {};
     const propKeys = Object.keys(props);
     propKeys.forEach((key) => {
-      const prop = props[key];
+      const prop = props[key] as PropType;
 
       const isTypeDefinition = prop.prototype && prop.prototype.constructor;
       const isArrayTypeDefinition =
@@ -31,13 +43,13 @@ export const getPropValidators = (props) => {
         (isArrayTypeDefinition && prop.some((type) => type === Function))
       ) {
         throw new Error(
-          `Properties should be JSON serializable: please change type of prop ${key} from Function.`
+          `Properties should be JSON serializable: please change type of prop ${key} from Function.`,
         );
       }
 
       if (isTypeDefinition || isArrayTypeDefinition) {
         result[key] = {
-          type: prop,
+          type: prop as new () => object,
         };
       } else {
         const isObjectOrArrayProp = prop.type === Object || prop.type === Array;
@@ -47,7 +59,7 @@ export const getPropValidators = (props) => {
           !(prop.default instanceof Function)
         ) {
           throw new Error(
-            `Property ${key} of type ${prop.type.name} must be returned from a factory function`
+            `Property ${key} of type ${prop.type!.name} must be returned from a factory function`,
           );
         }
 
@@ -79,7 +91,11 @@ export const getPropValidators = (props) => {
   }
 };
 
-export const validateProp = (value, type, validator) => {
+export const validateProp = (
+  value: unknown | unknown[] | boolean,
+  type: new () => object,
+  validator?: ((arg0: unknown) => boolean) | undefined,
+): boolean => {
   if (validator) {
     return validator(value);
   }

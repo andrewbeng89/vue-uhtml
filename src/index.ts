@@ -1,7 +1,4 @@
-import { reactive, effect } from "@vue/reactivity";
-import createDefineComponent from "./main";
-
-export const defineComponent = createDefineComponent({ reactive, effect });
+import defineComponent from "./main";
 
 export {
   onBeforeMount,
@@ -11,5 +8,6 @@ export {
   onUnmounted,
   useEmit,
 } from "./main";
+export { defineComponent };
 export * from "uhtml";
 export * from "@vue/reactivity";
