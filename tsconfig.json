@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "allowJs": true,
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -14,7 +15,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "uhtml": ["node_modules/uhtml"],
+      "@vue/reactivity": ["node_modules/@vue/reactivity"]
+    }
   },
   "include": ["src"]
 }
